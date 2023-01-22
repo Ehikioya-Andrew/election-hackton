@@ -1,0 +1,97 @@
+<app-outage-block (optionSelected)="showView($event)" [status]="($outageData | async)?.statusData"
+  [isLoading]="isLoadingData"></app-outage-block>
+<!-- Energy Analytics -->
+
+<!-- Outage Count -->
+
+<div class="row">
+  <div class="col-md-8 col-12">
+    <nb-card size="small">
+      <nb-card-header>
+        <div class="row m-0 p-o">
+          <div class="col-md pl-0">
+            <h6>Outage Count</h6>
+          </div>
+        </div>
+
+      </nb-card-header>
+      <nb-card-body>
+        <app-chart *ngIf="($outageData | async); else noPowerSummaryData" [notFoundCssClass]="'success'"
+          [data]="($outageData | async)?.count" [config]="{aspectRatio: 2.9 }" chartType="line">
+        </app-chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-4 col-12">
+    <nb-card size="small">
+      <nb-card-header>
+        <h6>Outage Summary</h6>
+      </nb-card-header>
+      <nb-list *ngIf="($outageData | async); else noPowerSummaryData">
+        <nb-list-item>
+          <div class="col">
+            <p class="m-0">OUTAGE HOURS </p>
+          </div>
+          <div class="col-auto text-right">
+            <span class="h5">
+              <!-- <nb-icon icon="count" pack="packs"></nb-icon> -->
+              {{($outageData | async)?.outageStat.totalDuration | number: '1.2-2'}}
+            </span>
+          </div>
+        </nb-list-item>
+        <nb-list-item>
+          <div class="col">
+            <p class="m-0">OUTAGE COUNT</p>
+          </div>
+          <div class="col-auto text-right">
+            <span class="h5">
+              <!-- <nb-icon icon="count" pack="packs"></nb-icon> -->
+              {{ ($outageData | async)?.outageStat.totalOutageCount| number: '1.2-2'}}
+            </span>
+          </div>
+        </nb-list-item>
+      </nb-list>
+      <ng-template #noPowerSummaryData>
+        <nb-card-body>
+          <app-not-found-svg [class]="'primary'" width="200px"></app-not-found-svg>
+          <p class="text-center mt-4 mb-0 caption-2">{{
+            $outageData && !isLoadingData
+              ? "Loading Records ..."
+              : "No Data to display"
+          }}</p>
+        </nb-card-body>
+      </ng-template>
+
+    </nb-card>
+  </div>
+</div>
+
+<!-- Outage Duration -->
+<div class="row">
+  <div class="col-12">
+    <nb-card size="small">
+      <nb-card-header>
+        <div class="row m-0 p-o">
+          <div class="col-md pl-0">
+            <h6>Outage Duration</h6>
+          </div>
+        </div>
+
+      </nb-card-header>
+      <nb-card-body>
+        <app-chart *ngIf="($outageData | async); else noPowerSummaryData" [notFoundCssClass]="'success'"
+          [data]="($outageData | async)?.duration" [config]="{aspectRatio: 2.9 }" chartType="line">
+        </app-chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+
+<!-- <div class="row m-0 mt-5" *ngIf="!formData">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+        <ng-lottie width="100%" [options]="options">
+        </ng-lottie>
+        <h6 class="text-secondary text-center">No data to display ...</h6>
+    </div>
+</div> -->

@@ -1,0 +1,155 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h5">{{isCreateRequest ? 'Create' : 'Update'}} Meter </div>
+                            <div class="col ml-auto text-right">
+                                <button [disabled]="submitted" (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <nb-alert *ngIf="errors?.length && !submitted" outline="danger" role="alert">
+                            <p class="alert-title"><b>Oh snap!</b></p>
+                            <ul class="alert-message-list">
+                                <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+                            </ul>
+                        </nb-alert>
+
+                        <nb-alert *ngIf=" messages?.length && !submitted" outline="success" role="alert">
+                            <p class="alert-title"><b>Hooray!</b></p>
+                            <ul class="alert-message-list">
+                                <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+                            </ul>
+                        </nb-alert>
+
+                        <form [formGroup]="meterForm" #form="ngForm" class="my-3">
+
+                            <ng-container *ngIf="isCreateRequest">
+                                <div class="form-control-group row my-3">
+                                    <div class="col-sm-3">
+                                        <label class="label" for="input-meterNumber">Meter Number:</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input nbInput fullWidth name="number" id="input-number"
+                                            placeholder="Meter number" #number
+                                            [status]="meterForm.controls['number'].touched ? (meterForm.controls['number'].invalid ? 'danger' : 'success') : 'basic'"
+                                            formControlName="number" autofocus (keypress)="keyPressNumbersOnly($event)">
+
+                                        <div *ngIf="meterForm.controls['number'].invalid && meterForm.controls['number'].touched"
+                                            class="text-danger xyz-in px-3 row">
+                                            <small xyz="fade down" class="error-message"
+                                                *ngIf="meterForm.controls['number'].errors?.required">
+                                                Meter Number is required!
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-phaseCount">Meter Phase-Count:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input nbInput fullWidth name="phaseCount" id="input-phaseCount"
+                                        placeholder="Meter phase count" #phaseCount type="number"
+                                        [status]="meterForm.controls['phaseCount'].touched ? (meterForm.controls['phaseCount'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="phaseCount" autofocus>
+
+                                    <div *ngIf="meterForm.controls['phaseCount'].invalid && meterForm.controls['phaseCount'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="meterForm.controls['phaseCount'].errors?.required">
+                                            Meter phase count is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-role">Manufacturer:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select fullWidth
+                                        [status]="meterForm.controls['meterManufacturerId'].touched ? (meterForm.controls['meterManufacturerId'].invalid ? 'danger' : 'success') : 'basic'"
+                                        placeholder="Select Manufacturer" formControlName="meterManufacturerId">
+                                        <nb-option *ngFor="let role of meterManufacturer$ | async; let i=count"
+                                            [value]="role.id">
+                                            {{role.meterType}}
+                                        </nb-option>
+                                    </nb-select>
+                                    <!-- input errors -->
+                                    <div *ngIf="meterForm.controls['meterManufacturerId'].invalid && meterForm.controls['meterManufacturerId'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="meterForm.controls['meterManufacturerId'].errors?.required">
+                                            Meter Manufacturer is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-meterModel">Model:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input nbInput fullWidth name="meterModel" id="input-meterModel" placeholder="Model"
+                                        #meterModel
+                                        [status]="meterForm.controls['meterModel'].touched ? (meterForm.controls['meterModel'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="meterModel" autofocus>
+
+                                    <div *ngIf="meterForm.controls['meterModel'].invalid && meterForm.controls['meterModel'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="meterForm.controls['meterModel'].errors?.required">
+                                            Model is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-role">Tariff:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select fullWidth
+                                        [status]="meterForm.controls['tariffId'].touched ? (meterForm.controls['tariffId'].invalid ? 'danger' : 'success') : 'basic'"
+                                        placeholder="Select Tariff" formControlName="tariffId">
+                                        <nb-option *ngFor="let tariff of tariff$ | async; let i=count"
+                                            [value]="tariff.id">
+                                            {{tariff.name}}
+                                        </nb-option>
+                                    </nb-select>
+
+                                    <div *ngIf="meterForm.controls['tariffId'].invalid && meterForm.controls['tariffId'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="meterForm.controls['tariffId'].errors?.required">
+                                            Tariff is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </nb-card-body>
+                    <nb-card-footer>
+                        <button (click)="isCreateRequest ? saveMeter() : updateMeter()" [nbSpinner]="submitted" nbButton
+                            fullWidth status="success" [disabled]="submitted || !meterForm.valid">
+                            {{isCreateRequest ? 'Save' : 'Update'}}
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

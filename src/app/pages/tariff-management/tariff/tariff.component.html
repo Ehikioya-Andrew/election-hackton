@@ -1,0 +1,28 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row m-0">
+    <div class="col-12">
+      <app-table *ngIf="tariffs.length; else noData" [isLoading]="isLoadingData" tableTitle="Tariff"
+        subTitle="Manage, assign and update Tariff associated with all assets" [data]="tariffs" [columns]="columns"
+        [showEdit]="permissionService.canAccessByResource('update', tariffResources.UpdateTariff)"
+        (requestData)="requestData($event)" (optionsSelected)="updateTariff($event)"
+        [showAdd]="permissionService.canAccessByResource('create', tariffResources.CreateTariff)"
+        (addClicked)="handleCreateNewTariffClick()">
+      </app-table>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+                      !tariffs.length && isLoadingData
+                        ? "Loading Records ..."
+                        : "No Data to display"
+                    }}
+      </h6>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,35 @@
+<div class="container-fluid p-0 m-0">
+    <div class="row">
+        <div class="col-12">
+            <nb-card>
+                <nb-card-body>
+                    <div class="row align-items-center">
+                        <div class="col d-flex align-items-center">
+                            <h5 class="mb-md-0">Audit Trail
+                                <p class="caption mb-0 mt-1">
+                                    Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                </p>
+
+                            </h5>
+                        </div>
+                        <div class="col-md-auto my-3 my-md-0 d-flex ">
+                            <div>
+                                <button nbButton outline status="primary" size="medium" (click)="configureForm()"
+                                    fullWidth>
+                                    <nb-icon icon="settings-2-outline"></nb-icon>
+                                    Configure
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-auto my-3 my-md-0 align-items-right">
+                            <div>
+                                <app-download [isDownloading]="isDownloading" (downloadCSVClicked)="generateReportCSV()"
+                                    (downloadPDFClicked)="generateReportPDF()"></app-download>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</div>

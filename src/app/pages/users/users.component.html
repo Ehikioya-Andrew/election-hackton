@@ -1,0 +1,28 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row m-0">
+    <div class="col-12">
+      <app-table *ngIf="users.length; else noData" [isLoading]="isLoadingData" tableTitle="Users"
+        subTitle="Manage all application users, roles and status" [data]="users" [columns]="columns"
+        (requestData)="requestData($event)" (optionsSelected)="updateUser($event)" (addClicked)="createUser()"
+        [showEdit]="permissionService.canAccessByResource('update', usersResources.UpdateUsers)"
+        [showAdd]="permissionService.canAccessByResource('create', usersResources.CreateUsers)">
+      </app-table>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #noData>
+  <div class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+              !users.length && isLoadingData
+                ? "Loading Records ..."
+                : "No Data to display"
+            }}
+      </h6>
+    </div>
+  </div>
+</ng-template>

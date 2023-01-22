@@ -1,0 +1,9 @@
+nb-layout-column{
+  padding: 20px !important;
+  overflow: hidden;
+}
+
+
+::ng-deep .iframe-container{
+  height: calc(100vh - 100px) !important;
+}

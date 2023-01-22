@@ -1,0 +1,25 @@
+<div class="container p-0 p-sm-1" style="height: 100%;">
+    <div xyz="fade down-1 flip-up-2 flip-left-2 duration-20 delay-2 stagger ease-in-out-back" style="height: 100%;"
+        class="row align-content-center justify-content-center">
+        <div class="col-md-6 col-lg-8 col-12 mx-auto">
+
+            <div class="col-12 text-center">
+                <ng-lottie height="300px" [options]="options" (animationCreated)="animationCreated($event)">
+                </ng-lottie>
+            </div>
+            <div class="col-12 text-center">
+                <h1 class="title xyz-in">
+                    Page Not Found!
+                </h1>
+                <p class="sub-title xyz-in">We're sorry, the page you requested was not found.</p>
+            </div>
+            <div class="col-12 text-center">
+                <div class="my-5">
+                    <a [routerLink]="['/']" outline nbButton fullWidth status="info">Go home <nb-icon
+                            icon="home-outline">
+                        </nb-icon></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

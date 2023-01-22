@@ -1,0 +1,52 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h6">Settings</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <form [formGroup]="auditForm" #form="ngForm" class="my-3">
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-dateRange">Date Range:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="dateRange" id="input-dateRange"
+                                        placeholder="Date Range:" #dateRange [nbDatepicker]="datePicker"
+                                        [status]="auditForm.controls['dateRange'].touched ? (auditForm.controls['dateRange'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="dateRange" autofocus>
+                                    <nb-rangepicker #datePicker></nb-rangepicker>
+                                    <div *ngIf="auditForm.controls['dateRange'].invalid && auditForm.controls['dateRange'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="auditForm.controls['dateRange'].errors?.required">
+                                            Date Range is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                         </form>
+                    </nb-card-body>
+
+                    <nb-card-footer>
+                        <button (click)="loadTable()" nbButton fullWidth status="primary"
+                            [disabled]="isLoading || !auditForm.valid">
+                            Confirm
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

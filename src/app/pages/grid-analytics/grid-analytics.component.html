@@ -1,0 +1,77 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row title">
+    <div class="col-12 title">
+      <nb-card>
+        <nb-card-body>
+          <div class="row align-items-center">
+            <div class="col d-flex align-items-center">
+              <h5 class="mb-md-0 mr-4">
+                Grid Analytics Explorer
+                <p class="caption mb-0 mt-1">
+                  Site: <b>{{ getStateName(state$ | async) }}</b>
+                </p>
+              </h5>
+              <button
+              class="text-capitalize"
+              nbButton
+              outline
+              size="medium"
+              [nbSpinner]="(isLoading$ | async) || false"
+              (click)="refreshIframe()"
+            >
+              <nb-icon icon="refresh-outline"></nb-icon>
+              RESET
+            </button>
+            </div>
+
+            <div class="col-lg-3 col-md-12 col-xs-12 col-sm-12">
+              <nb-select
+                (selectedChange)="onSiteChange($event)"
+                [selected]="state$ | async"
+                fullWidth
+                placeholder="Select Asset"
+              >
+                <nb-option
+                  *ngFor="let state of states; let i = index"
+                  [value]="state.state"
+                >
+                  {{ state.name }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="iframeSrc$ | async as iframeSrc; else loadingTpl">
+  <div [hidden]="showIframeLoader" class="row m-0 iframe-container">
+    <div class="hide-header"></div>
+    <iframe
+      (load)="onLoaded()"
+      height="100%"
+      [src]="iframeSrc"
+      class="widget-container_iframe"
+      width="100%"
+    >
+    </iframe>
+  </div>
+
+  <ng-container *ngIf="showIframeLoader" [ngTemplateOutlet]="loadingTpl">
+  </ng-container>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <div
+    [style.height.px]="400"
+    class="col-12 justify-content-center align-items-center d-flex"
+  >
+    <ng-lottie
+      height="250px"
+      [options]="options"
+      (animationCreated)="animationCreated($event)"
+    >
+    </ng-lottie>
+  </div>
+</ng-template>

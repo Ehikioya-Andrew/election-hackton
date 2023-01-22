@@ -1,0 +1,288 @@
+<div class="container-fluid p-0 m-0">
+  <!-- Energy Analytics -->
+
+  <div class="row">
+    <div class="col-md-9 col-12">
+      <nb-flip-card class="flip-card" [showToggleButton]="false" [flipped]="flipped">
+        <nb-card-front>
+          <nb-card width="100%" size="large">
+            <nb-card-header>
+              <div class="row align-items-center">
+                <div class="col d-flex align-items-center">
+                  <h6>Energy {{ selectCostChart ? "Cost" : "Consumption" }}</h6>
+                </div>
+                <div class="col-md-auto my-3 my-md-0">
+                  <button (click)="selectCostChart = false" [status]="!selectCostChart ? 'primary' : 'basic'" nbButton
+                    outline size="small" fullWidth>
+                    Consumption
+                  </button>
+                </div>
+                <div class="col-md-auto my-md-0">
+                  <button (click)="selectCostChart = true" [status]="selectCostChart ? 'primary' : 'basic'" nbButton
+                    outline size="small" fullWidth>
+                    Cost
+                  </button>
+                </div>
+                <div class="col-md-auto mt-3 my-md-0">
+                  <button status="primary" [nbSpinner]="isLoadingData" nbSpinnerSize="small" [disabled]="isLoadingData"
+                    (click)="toggleFlipFront($event)" nbButton size="small" fullWidth>
+                    Forecast
+                  </button>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <app-chart *ngIf="!selectCostChart" [notFoundCssClass]="'danger'"
+                [data]="($loadPointChartsData | async)?.consumption" [config]="{ radius: ['50%', '60%'] }"
+                chartType="bar" [showSubText]="false">
+              </app-chart>
+              <app-chart *ngIf="selectCostChart" [notFoundCssClass]="'success'"
+                [data]="($loadPointChartsData | async)?.cost" [config]="{ aspectRatio: 2.9 }" chartType="bar"
+                [showSubText]="false">
+              </app-chart>
+            </nb-card-body>
+          </nb-card>
+        </nb-card-front>
+        <nb-card-back>
+          <nb-card size="large">
+            <nb-card-header>
+              <div class="row">
+                <div class="col">
+                  <button (click)="toggleFlipBlack()" nbButton ghost size="small" status="primary"
+                    [disabled]="returnButtonDisable">
+                    <nb-icon icon="arrow-back-outline"></nb-icon>
+                    Return
+                  </button>
+                </div>
+                <div class="col">
+                  <h6>Energy Forecast</h6>
+                </div>
+                <div class="col-auto-md">
+                  <form class="form-inline col" [formGroup]="forecastForm">
+                    <nb-select (selectedChange)="setForecastChart($event.target?.value)" placeholder="prediction length"
+                      formControlName="predictionLength" [nbSpinner]="isLoadingData" nbSpinnerSize="large"
+                      nbSpinnerStatus="primary">
+                      <nb-option [value]="1">1 day</nb-option>
+                      <nb-option [value]="3">3 days</nb-option>
+                      <nb-option [value]="5">5 days</nb-option>
+                      <nb-option [value]="7">7 days</nb-option>
+                    </nb-select>
+                  </form>
+                </div>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <app-chart *ngIf="showForecastChart; else noForcastData" [data]="forecastChartData"
+                [config]="{ aspectRatio: 2.9 }" chartType="bar">
+              </app-chart>
+              <ng-template #noForcastData>
+                <nb-card-body>
+                  <app-not-found-svg [class]="'primary'" width="200px"></app-not-found-svg>
+                  <p class="text-center mt-4 mb-0 caption-2">
+                    {{
+                      !forecastChartData && isLoadingData
+                        ? "Loading Records ..."
+                        : "No Data to display"
+                    }}
+                  </p>
+                </nb-card-body>
+              </ng-template>
+            </nb-card-body>
+          </nb-card>
+        </nb-card-back>
+      </nb-flip-card>
+    </div>
+    <div class="col-md-3 col-12">
+      <nb-card size="large">
+        <nb-card-header>
+          <h6>Energy Summary</h6>
+        </nb-card-header>
+        <nb-list class="justify-content-around" *ngIf="$loadPointEnergySummary | async as summary; else noSummaryData">
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Consumption</p>
+              <p class="mt-3">
+                <span class="h5">{{ summary.totalEnergyConsumption | number: "1.2-2" }}
+                  <span class="caption"> (kWh) </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Tariff</p>
+              <p class="mt-3">
+                <span class="h5">{{ summary.tarrif | currency: "₦" }}
+                  <span class="caption"> </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Cost</p>
+              <p class="mt-3">
+                <span class="h5">{{ summary.totalEnergyCost | currency: "₦" }}
+                  <span class="caption"> </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+        </nb-list>
+        <ng-template #noSummaryData>
+          <nb-card-body>
+            <app-not-found-svg [class]="'warning'" width="200px"></app-not-found-svg>
+            <p class="text-center mt-4 mb-0 caption-2">
+              {{
+                $loadPointEnergySummary && !isLoadingData
+                  ? "Loading Records ..."
+                  : "No Data to display"
+              }}
+            </p>
+          </nb-card-body>
+        </ng-template>
+      </nb-card>
+    </div>
+  </div>
+
+  <!-- Power Analytics -->
+  <div class="row">
+    <div class="col-md-9 col-12">
+      <nb-card size="large">
+        <nb-card-header>
+          <div class="row m-0 p-o">
+            <div class="col-md pl-0">
+              <h6>Power Demand</h6>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <app-chart [notFoundCssClass]="'success'" [data]="($loadPointChartsData | async)?.demand"
+            [showSubText]="false" [config]="{ radius: ['50%', '60%'] }" chartType="bar">
+          </app-chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-3 col-12">
+      <nb-card size="large">
+        <nb-card-header>
+          <h6>Power Summary</h6>
+        </nb-card-header>
+        <nb-list class="justify-content-around" *ngIf="$loadPointChartsData | async; else noPowerSummaryData">
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Avg. Power Demand</p>
+              <p class="mt-3">
+                <span class="h5">{{ avgPowerDemand | number: "1.2-2" }}
+                  <span class="caption"> (kW) </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Max. Power Demand</p>
+              <p class="mt-3">
+                <span class="h5">{{ maxPowerDemand | number: "1.2-2" }}
+                  <span class="caption"> (kW) </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Min. Power Demand</p>
+              <p class="mt-3">
+                <span class="h5">{{ minPowerDemand | number: "1.2-2" }}
+                  <span class="caption"> (kW) </span>
+                </span>
+              </p>
+            </div>
+          </nb-list-item>
+        </nb-list>
+        <ng-template #noPowerSummaryData>
+          <nb-card-body>
+            <app-not-found-svg [class]="'primary'" width="200px"></app-not-found-svg>
+            <p class="text-center mt-4 mb-0 caption-2">
+              {{
+                $loadPointChartsData && !isLoadingData
+                  ? "Loading Records ..."
+                  : "No Data to display"
+              }}
+            </p>
+          </nb-card-body>
+        </ng-template>
+      </nb-card>
+    </div>
+  </div>
+
+  <!-- Uptime and Downtime Analytics -->
+  <div class="row">
+    <div class="col-md-5 col-12">
+      <nb-card size="small">
+        <nb-card-header>
+          <div class="row m-0 p-o">
+            <div class="col-md pl-0">
+              <h6>Up Time VS Down Time</h6>
+            </div>
+          </div>
+        </nb-card-header>
+        <nb-card-body>
+          <app-chart [notFoundCssClass]="'success'" [data]="($loadPointChartsData | async)?.uptimeChart"
+            [showSubText]="false" [config]="{ aspectRatio: 2.9 }" chartType="pie">
+          </app-chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-4 col-12">
+      <nb-card size="small">
+        <nb-card-header>Power Cut Historicals</nb-card-header>
+        <nb-card-body *ngIf="$loadPointChartsData |async; else noPowerSummaryData">
+          <div class="my-2" *ngFor="let cut of downInterval.slice(0,5)">
+            <app-item-card content="Start: {{ cut.start | date: 'medium':'UTC' }} End: {{
+                cut.end | date: 'medium':'UTC'
+              }} Duration: {{ cut.duration }}">
+            </app-item-card>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+    <div class="col-md-3 col-12">
+      <nb-card size="small">
+        <nb-card-header>
+          <h6>Duration Summary</h6>
+        </nb-card-header>
+        <nb-list class="justify-content-around" *ngIf="$loadPointChartsData | async; else noDurationData">
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Uptime Duration</p>
+              <p class="mt-3">
+                <span class="h6">{{ upTime }} </span>
+              </p>
+            </div>
+          </nb-list-item>
+          <nb-list-item>
+            <div class="col">
+              <p class="mt-2">Downtime Duration</p>
+              <p class="mt-3">
+                <span class="h6">{{ downTime }} </span>
+              </p>
+            </div>
+          </nb-list-item>
+        </nb-list>
+        <ng-template #noDurationData>
+          <nb-card-body>
+            <app-not-found-svg [class]="'info'" width="200px"></app-not-found-svg>
+            <p class="text-center mt-4 mb-0 caption-2">
+              {{
+                $loadPointChartsData && !isLoadingData
+                  ? "Loading Records ..."
+                  : "No Data to display"
+              }}
+            </p>
+          </nb-card-body>
+        </ng-template>
+      </nb-card>
+    </div>
+  </div>
+</div>

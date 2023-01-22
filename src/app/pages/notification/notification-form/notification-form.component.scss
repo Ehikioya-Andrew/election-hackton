@@ -1,0 +1,42 @@
+@import "../../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include media-breakpoint-down(is) {
+  ::ng-deep .calendar-with-time {
+    width: 100vw;
+    height: 50vh;
+    padding-top: 20px;
+  }
+  ::ng-deep .timepicker-section.timepicker-single-column-width {
+    height: 55vh;
+  }
+}
+
+.scroll-overflow{
+    height: 100px;
+    max-height: 150px;
+}
+
+.user-select{
+    width: 100%;
+    border: 1px solid #efefef;
+    height: 34px;
+    border-radius: 4px;
+}
+
+nb-alert {
+    .alert-title,
+    .alert-message {
+        margin: 0 0 0.5rem;
+    }
+    .alert-message-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+nb-card {
+    max-height: 85vh !important;
+}

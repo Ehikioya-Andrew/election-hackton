@@ -1,0 +1,14 @@
+<app-reporting-block (reportDownloadCSV)="downloadReportsCSV()" (reportDownloadPDF)="downloadReportsPDF()"
+  [isDownloading]="isDownloading"></app-reporting-block>
+<div class="container-fluid p-0" *ngIf="formData.assetType">
+  <app-load-point-reporting></app-load-point-reporting>
+  <app-power-source-reporting></app-power-source-reporting>
+  <app-generating-unit-reporting></app-generating-unit-reporting>
+</div>
+<div class="container-fluid p-0" *ngIf="!formData.assetType">
+  <div class="col-lg-3 col-md-4 col-8 mx-auto">
+    <ng-lottie width="100%" [options]="options">
+    </ng-lottie>
+    <h6 class="text-secondary text-center">No data to display ...</h6>
+  </div>
+</div>

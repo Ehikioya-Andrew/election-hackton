@@ -1,0 +1,42 @@
+<canvas id="landing-canvas"></canvas>
+<nb-layout class="m-0 p-0">
+  <nb-layout-header class="landing-header mx-md-5">
+    <div class="header-container pr-0 col mt-md-5">
+      <div class="logo-container">
+        <h3>
+          <!-- <img src="assets/icons/logo.png" height="50px" alt=""> -->
+          <img *ngIf="!isMobile" src="../../../assets/images/lasg-logo-transp.png" alt="Logo" width="7%">
+          <img *ngIf="isMobile" src="../../../assets/images/lasg-logo-transp.png" alt="Logo" width="20%">
+          &nbsp;<span>Lagos State Live Monitoring</span>
+        </h3>
+      </div>
+    </div>
+
+    <div class="header-container col-auto mt-md-5 ml-auto">
+
+      <a [routerLink]="['/auth/login']" nbButton size="large" status="primary">Sign In</a>
+    </div>
+  </nb-layout-header>
+
+  <nb-layout-column class="p-0">
+    <div class="container " style="height: 100%;">
+      <div xyz="fade-100% duration-10 stagger ease-in-out-back" style="height: 100%;" class="row align-content-center">
+        <div class="col-md-7 xyz-in">
+          <h1 class="heading-56">Live Monitoring Solution.</h1>
+          <h6>
+            Track Electricity Metrics in Real Time.
+          </h6>
+          <h6>
+            Our all-in-one solution is here to let you focus on your business.
+          </h6>
+        </div>
+        <div class="col-md-5 ml-md-auto m-0 p-0">
+          <ng-lottie [options]="options" (animationCreated)="animationCreated($event)">
+          </ng-lottie>
+        </div>
+      </div>
+    </div>
+
+  </nb-layout-column>
+
+</nb-layout>

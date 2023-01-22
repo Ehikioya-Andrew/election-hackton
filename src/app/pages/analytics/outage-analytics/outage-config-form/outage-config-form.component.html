@@ -1,0 +1,119 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h6">Settings</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <form [formGroup]="outageForm" #form="ngForm" class="my-3">
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-assetType">Asset Type:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select *ngIf="outageForm" fullWidth placeholder="Select asset type"
+                                        formControlName="assetType">
+                                        <nb-option (click)="onSelectAssetType()" *ngFor="let assetType of assetTypeName; let i=index"
+                                            [value]="assetType[0]">{{assetType[1]}}
+                                        </nb-option>
+                                    </nb-select>
+
+                                    <div *ngIf="outageForm.controls['assetType'].invalid && outageForm.controls['assetType'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="outageForm.controls['assetType'].errors?.required">
+                                            Asset type is required
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div  class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-locationId">Location:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-form-field>
+                                        <nb-icon nbPrefix [icon]="'search-outline'" pack="eva">
+                                        </nb-icon>
+                                        <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                                            placeholder="Search for location" [nbAutocomplete]="auto" (input)="onChange($event)"
+                                            [status]="outageForm.controls['location'].touched ? (outageForm.controls['location'].invalid ? 'danger' : 'success') : 'basic'"
+                                            formControlName="location" autofocus>
+                                        <button nbSuffix nbButton ghost type="button"
+                                            (click)="clearLocationSelection()">
+                                            <nb-icon [icon]="'close-outline'" pack="eva">
+                                            </nb-icon>
+                                        </button>
+                                    </nb-form-field>
+                                    <div *ngIf="outageForm.controls['location'].invalid && outageForm.controls['location'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="outageForm.controls['location'].errors?.required">
+                                            Location is required!
+                                        </small>
+                                    </div>
+                                    <nb-autocomplete #auto>
+                                        <nb-option (click)="onSelectionChange(option)"
+                                            *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                                            <div>
+                                                Location:
+                                                <span class="text-capitalize">
+                                                    {{ option.name }}
+                                                </span>
+                                                <br *ngIf="option.meter">
+                                                <span class="caption-2" *ngIf="option.meter">Meter Number:
+                                                    <b>
+                                                        {{option.meter}}
+                                                    </b>
+                                                </span>
+                                            </div>
+                                        </nb-option>
+                                    </nb-autocomplete>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-dateRange">Date Range:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="dateRange" id="input-dateRange"
+                                        placeholder="Date Range:" #dateRange [nbDatepicker]="datePicker"
+                                        [status]="outageForm.controls['dateRange'].touched ? (outageForm.controls['dateRange'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="dateRange" autofocus>
+                                    <nb-rangepicker #datePicker></nb-rangepicker>
+                                    <div *ngIf="outageForm.controls['dateRange'].invalid && outageForm.controls['dateRange'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="outageForm.controls['dateRange'].errors?.required">
+                                            Date Range is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                         </form>
+                    </nb-card-body>
+
+                    <nb-card-footer>
+                        <button (click)="loadTable()" nbButton fullWidth status="primary"
+                            [disabled]="isLoading || !outageForm.valid">
+                            Confirm
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

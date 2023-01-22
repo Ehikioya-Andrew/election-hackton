@@ -1,0 +1,17 @@
+@mixin ngx-layout() {
+  @include media-breakpoint-down(is) {
+    .row {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+  }
+  :fullscreen {
+    background-color: var(--layout-background-color);
+  }
+
+  nb-layout-column {
+    &:fullscreen {
+      padding: 3.25rem 3.25rem 1rem !important;
+    }
+  }
+}

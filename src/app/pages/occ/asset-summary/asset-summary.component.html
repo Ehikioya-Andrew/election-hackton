@@ -1,0 +1,171 @@
+<nb-layout>
+  <nb-layout-column class="h-100">
+    <div *ngIf="filteredMarkers?.length; else loaderTpl" class="container-fluid p-2 p-xl-4 m-0 h-100 d-flex"
+      style="flex-direction: column">
+      <div class="row mb-3">
+        <div class="col">
+          <h5>Asset Summary Dashboard</h5>
+        </div>
+      </div>
+      <div class="row d-flex" style="height: 100%">
+        <div class="col-8 col-xl-9">
+          <nb-card [nbSpinner]="isLoadingData" class="p-0 map-card xyz-in" xyz="fade ">
+            <nb-card-body class="m-0 p-0" style="overflow: hidden">
+              <app-map style="max-height: 100%" height="90vh" [showSlide]="false" [markerModels]="filteredMarkers"
+                [showSlideOutByDefault]="false" [zoomInToMarker]="zoomMarker" [showInfoWindow]="false">
+                <ng-container infoMarkerContainer [ngTemplateOutlet]="infoMarkerTpl"></ng-container>
+              </app-map>
+            </nb-card-body>
+          </nb-card>
+        </div>
+        <div class="col-4 col-xl-3 h-100" style="display: flex; flex-direction: column">
+          <ng-container *ngIf="isPanning">
+            <ng-container [ngSwitch]="randomMarkerInfo.info?.type">
+              <nb-card *ngSwitchCase="assetType.LOADPOINT.toString()" class="map-content-card xyz-in" xyz="fade "
+                style="height: 100%; max-height: 55vh;">
+                <nb-card-header>
+                  <h6>
+                    {{ randomMarkerInfo.info?.data?.name | titlecase }}
+                  </h6>
+                  <p class="pt-3">
+                    Asset Type: <span class="caption">Load Point</span>
+                  </p>
+                </nb-card-header>
+                <nb-card-body>
+                  <app-item-card title="Energy Consumed:" info="{{
+                      randomMarkerInfo.info?.data?.totalEnergyConsumed
+                        | number: '1.2-2'
+                    }} kWh">
+                  </app-item-card>
+
+                  <app-item-card title="Power Cut:" info="{{ randomMarkerInfo.info?.data?.powerCut }}">
+                  </app-item-card>
+                  <app-item-card title="Last Recorded:" info="{{
+                      randomMarkerInfo.info?.data?.lastEnergyConsumedDate | date : 'medium' : 'UTC'
+                    }}">
+                  </app-item-card>
+
+                  <app-item-card title="Online Status:" info="{{
+                      randomMarkerInfo.info?.data?.onlineStatus
+                        ? 'Online'
+                        : 'offline'
+                    }}">
+                  </app-item-card>
+
+                </nb-card-body>
+              </nb-card>
+              <nb-card *ngSwitchCase="assetType.GEN_SET.toString()" class="map-content-card" style="height: 100%">
+                <nb-card-header>
+                  <h6>
+                    {{ randomMarkerInfo.info?.data?.name | titlecase }}
+                  </h6>
+                  <p class="pt-3">
+                    Asset Type: <span class="caption">Generating Unit</span>
+                  </p>
+                </nb-card-header>
+                <nb-card-body class="xyz-in" xyz="fade ">
+                  <ul class="mt-2">
+                    <li class="h4">
+                      <b class="h6">Energy Supplied: </b>{{
+                        randomMarkerInfo.info?.data?.totalEnergySupplied
+                          | number: "1.2-2"
+                      }}
+                      kWh
+                    </li>
+                    <li class="h4">
+                      <b class="h6">Power Cut:</b>
+                      {{ randomMarkerInfo.info?.data?.powerCut }}
+                    </li>
+                    <li class="h4">
+                      <b class="h6">Last Recorded:</b>
+                      {{
+                        randomMarkerInfo.info?.data?.lastEnergySuppliedDate
+                          | date: "medium"
+                      }}
+                    </li>
+                    <li class="h4">
+                      <b class="h6">Last Energy Supplied:</b>
+                      {{
+                        randomMarkerInfo.info?.data?.lastEnergySupplied
+                          | number: "1.2-2"
+                      }}
+                      kWh
+                    </li>
+                    <li class="h4">
+                      <b class="h6">Online Status: </b>{{
+                        randomMarkerInfo.info?.data?.onlineStatus
+                          ? "Online"
+                          : "offline"
+                      }}
+                    </li>
+                  </ul>
+                </nb-card-body>
+              </nb-card>
+              <nb-card *ngSwitchCase="assetType.POWER_SOURCE.toString()" class="map-content-card xyz-in" xyz="fade "
+                style="height: 100%">
+                <nb-card-header>
+                  <h6>
+                    {{ randomMarkerInfo.info?.data?.name | titlecase }}
+                  </h6>
+                  <p class="pt-3">
+                    Asset Type: <span class="caption">Power Station</span>
+                  </p>
+                </nb-card-header>
+                <nb-card-body>
+                  <ul class="mt-2">
+                    <li class="h4">
+                      <b class="h6">Energy Supplied: </b>{{
+                        randomMarkerInfo.info?.data?.totalEnergySupplied
+                          | number: "1.2-2"
+                      }}
+                      kWh
+                    </li>
+                    <li class="h4">
+                      <b class="h6">Online Status: </b>{{
+                        randomMarkerInfo.info?.data?.onlineStatus
+                          ? "Online"
+                          : "offline"
+                      }}
+                    </li>
+                  </ul>
+                </nb-card-body>
+              </nb-card>
+            </ng-container>
+          </ng-container>
+          <nb-card *ngIf="!isPanning" size="small" class="xyz-in" xyz="fade " style="height: 80%; max-height: 55vh;">
+            <nb-card-body>
+              <ng-lottie height="200px" [options]="noMarkerAnimationOptions"
+                (animationCreated)="animationCreated($event)"
+                class="d-flex justify-content-center align-content-center">
+              </ng-lottie>
+            </nb-card-body>
+          </nb-card>
+
+          <nb-card size="small" class="xyz-in" xyz="fade " style="height: 100%">
+            <nb-card-header>
+              <h6>Location Status</h6>
+            </nb-card-header>
+            <nb-card-body class="h-100">
+              <app-chart [notFoundCssClass]="'success'" [data]="pieChartData" [config]="{ radius: ['50%', '65%'] }"
+                chartType="pie">
+              </app-chart>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+    <ng-template #loaderTpl>
+      <div class="col-12 text-center m-auto justify-content-center loader-div">
+        <ng-lottie height="500px" [options]="animationOptions" (animationCreated)="animationCreated($event)">
+        </ng-lottie>
+      </div>
+    </ng-template>
+    <ng-template #infoMarkerTpl>
+      <ng-container [ngSwitch]="randomMarkerInfo.info?.type">
+        <h6 class="text-center mb-4">
+          {{ randomMarkerInfo.info?.data?.name | titlecase }}
+        </h6>
+      </ng-container>
+    </ng-template>
+  </nb-layout-column>
+</nb-layout>

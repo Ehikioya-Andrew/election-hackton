@@ -1,0 +1,83 @@
+<nb-card *ngIf="!tableOnly">
+  <nb-spinner
+    size="tiny"
+    *ngIf="tableTitle && isLoading"
+    status="primary"
+    class="header-spinner ml-auto"
+    style="z-index: 1"
+    message=""
+  >
+  </nb-spinner>
+  <nb-card-header *ngIf="tableTitle">
+    <div class="row">
+      <div
+        [ngClass]="{ 'col-auto': hasCloseButton, col: !hasCloseButton }"
+        class="m-0 h5"
+      >
+        <span>
+          {{ tableTitle }}
+        </span>
+        <p *ngIf="subTitle" class="caption mb-0">
+          {{ subTitle }}
+        </p>
+      </div>
+      <div
+        class="col d-flex align-items-center justify-content-end ml-auto text-right"
+      >
+        <ng-content></ng-content>
+        <button
+          *ngIf="hasCloseButton"
+          (click)="closed.emit()"
+          class="p-1"
+          nbButton
+          ghost
+        >
+          <nb-icon icon="close"></nb-icon>
+        </button>
+      </div>
+    </div>
+  </nb-card-header>
+  <nb-card-body class="my-3">
+    <div class="row" *ngIf="!tableTitle && isLoading">
+      <div class="col-12 mb-4">
+        <p class="p-3 m-0">
+          <nb-spinner
+            size="tiny"
+            status="primary"
+            class="header-spinner ml-auto"
+            style="z-index: 1"
+            message=""
+          >
+          </nb-spinner>
+        </p>
+      </div>
+    </div>
+    <ng2-smart-table
+      (userRowSelect)="onRowClicked($event)"
+      style="display: block"
+      (edit)="onEdit($event)"
+      (create)="onAdd()"
+      [source]="source"
+      [settings]="settings"
+    >
+    </ng2-smart-table>
+    <p *ngIf="recordLength" class="caption text-hint text-center mb-0 mt-2">
+      (Count: {{ recordLength }})
+    </p>
+  </nb-card-body>
+</nb-card>
+
+<ng-container *ngIf="tableOnly">
+  <ng2-smart-table
+    (userRowSelect)="onRowClicked($event)"
+    style="display: block"
+    (edit)="onEdit($event)"
+    (create)="onAdd()"
+    [source]="source"
+    [settings]="settings"
+  >
+  </ng2-smart-table>
+  <p *ngIf="recordLength" class="caption text-hint text-center mb-0 mt-2">
+    (Count: {{ recordLength }})
+  </p>
+</ng-container>

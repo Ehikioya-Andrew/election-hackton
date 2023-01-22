@@ -1,0 +1,62 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row">
+    <div class="col-12">
+      <nb-card>
+        <nb-card-body>
+          <div class="row align-items-center">
+            <div class="col d-flex align-items-center">
+              <h5 class="mb-md-0">{{assetResources.title}} Analytics
+                <p *ngIf="!canViewAnalytics else selectionSummart" class="caption mb-0">
+                  {{assetResources.subTitle}}
+                </p>
+                <ng-template #selectionSummart>
+                  <p *ngIf="!isSummary" class="caption mb-0 text-capitalize">
+                    Location: <b>{{locationName}}</b>
+                  </p>
+                  <p class="caption mb-0 mt-1">
+                    Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                  </p>
+                </ng-template>
+
+              </h5>
+            </div>
+            <div class="col-md-auto my-3 my-md-0">
+              <div>
+                <button nbButton outline status="primary" size="medium" (click)="configureForm()" fullWidth>
+                  <nb-icon icon="settings-2-outline"></nb-icon>
+                  Configure
+                </button>
+              </div>
+            </div>
+            <div class="col-md-auto my-3 my-md-0">
+              <div>
+                <button *ngIf="isSummary" nbButton outline size="medium" fullWidth
+                  [routerLink]="[assetResources.assetRoute]">
+                  <nb-icon icon="arrowhead-left-outline"></nb-icon>
+                  {{assetResources.title}} Assets
+                </button>
+                <button *ngIf="!isSummary" nbButton outline size="medium" fullWidth
+                  [routerLink]="[assetResources.assetRouteSummary]">
+                  <nb-icon icon="arrowhead-left-outline"></nb-icon>
+                  {{assetResources.title}} summary
+                </button>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+  <ng-content *ngIf="canViewAnalytics else noLocationSelected" #name></ng-content>
+
+  <ng-template #noLocationSelected>
+    <div class="row mt-5">
+      <div class="col-lg-3 col-md-4 col-8 mx-auto">
+        <ng-lottie width="100%" [options]="options">
+        </ng-lottie>
+        <h6 class="text-secondary text-center">No Location Selected</h6>
+      </div>
+    </div>
+  </ng-template>
+</div>

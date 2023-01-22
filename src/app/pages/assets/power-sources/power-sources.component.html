@@ -1,0 +1,33 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row m-0">
+    <div class="col-12">
+      <app-table *ngIf="powerSources.length; else noData" [isLoading]="isLoadingData" tableTitle="Power Stations"
+        subTitle="Manage on power station assets and attached Gen. Sets" [data]="powerSources" [columns]="columns"
+        (requestData)="requestData($event)" (optionsSelected)="updatePowerSource($event)"
+        [showEdit]="permissionService.canAccessByResource('update', powerSourcesResources.UpdatePowerSource)"
+        [showAdd]="permissionService.canAccessByResource('create', powerSourcesResources.CreatePowerSource)"
+        (addClicked)="handleCreateNewPowerSourceClick()">
+        <button [routerLink]="[powerSourceAnalyticsLink]" nbButton outline>
+          View Analytics
+          <nb-icon icon="pie-chart-outline"></nb-icon>
+        </button>
+      </app-table>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+                  !powerSources.length && isLoadingData
+                    ? "Loading Records ..."
+                    : "No Data to display"
+                }}
+      </h6>
+    </div>
+  </div>
+</ng-template>

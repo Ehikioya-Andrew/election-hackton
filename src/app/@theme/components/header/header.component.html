@@ -1,0 +1,37 @@
+<div class="header-container">
+  <div class="logo-container">
+    <a (click)="toggleSidebar()" href="#" class="sidebar-toggle">
+      <nb-icon icon="menu-2-outline"></nb-icon>
+    </a>
+    <a class="logo font-weight-bold" href="#" (click)="navigateHome()">
+      <img src="../../../../assets/images/lasg-logo-transp.png" alt="Logo"><span>Lagos State Live Monitoring</span>
+    </a>
+    <div *ngIf="!userPictureOnly" class="item-group">
+      <button *ngIf="(canInstall$ | async)" (click)="installPwa()" class="square xyz-in" nbButton
+        [hero]="this.currentTheme === 'default'" [outline]="this.currentTheme !== 'default'" nbTooltipStatus="basic"
+        nbTooltip="Install LSLM" nbTooltipPlacement="bottom">
+        <nb-icon icon="download-outline">
+        </nb-icon>
+        Install
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="header-container">
+  <nb-actions size="small">
+    <nb-action nbTooltip="Global Search" nbTooltipPlacement="bottom" nbTooltipStatus="basic" class="control-item">
+      <nb-search type="rotate-layout"></nb-search>
+    </nb-action>
+    <nb-action (click)="fullscreenLayout()" nbTooltip="Fullscreen Mode" nbTooltipPlacement="bottom"
+      nbTooltipStatus="basic" class="control-item" icon="expand-outline"></nb-action>
+    <nb-action class="control-item" icon="bell-outline" nbTooltip="Notifications" nbTooltipPlacement="bottom"
+      nbTooltipStatus="basic">
+    </nb-action>
+    <nb-action class="user-action">
+      <nb-user [nbContextMenu]="userMenu" nbContextMenuTag="user-menu" [onlyPicture]="userPictureOnly"
+        name="{{user.firstName}} {{user.lastName}}" [picture]="''">
+      </nb-user>
+    </nb-action>
+  </nb-actions>
+</div>

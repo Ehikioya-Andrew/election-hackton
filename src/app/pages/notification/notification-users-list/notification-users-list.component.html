@@ -1,0 +1,30 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-9 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%"
+                    style="max-height: 100vh; overflow-y: auto; border: 1px solid transparent;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h6">User List</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <div class="row m-0">
+                            <div class="col-12">
+                                <app-table [isLoading]="false" [data]="users" [columns]="columns" [showEdit]="false"
+                                    [showAdd]="false" [tableOnly]="true">
+                                </app-table>
+                            </div>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<ng-container *ngIf="(accessChecker.isGranted('update', usersResources.UpdateUsers) | async)">
+    <nb-toggle labelPosition="end" [ngStyle]="{'opacity': isSubmitted ? '0' : '1'}" [nbSpinner]="isSubmitted"
+        [(checked)]="checked" [disabled]="(onlineStat.isOnlineSub.asObservable() | async) === false || !canUpdateRow"
+        (checkedChange)="onStatusChange($event)">
+        {{checked ? 'Active' : 'Inactive'}}
+    </nb-toggle>
+</ng-container>
+
+<ng-container *ngIf="(accessChecker.isGranted('update', usersResources.UpdateUsers) | async) === false">
+    {{checked ? 'Active' : 'Inactive'}}
+</ng-container>
+
+
+<nb-spinner *ngIf="isSubmitted" status="primary" class="header-spinner ml-auto" style="z-index: 1;" message="">
+</nb-spinner>

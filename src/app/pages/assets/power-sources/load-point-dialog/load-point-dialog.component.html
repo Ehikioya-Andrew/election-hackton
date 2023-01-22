@@ -1,0 +1,15 @@
+<div style="width: 100vw">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 mx-auto xyz-in dialog" xyz="fade down-25%"
+        style="max-height: 100vh; overflow-y: auto">
+        <app-table [isLoading]="isLoadingData" [showAdd]="false" [pageLength]="5" [showEdit]="false"
+          (requestData)="requestData($event)" [data]="powerSourceLoadPoint" [columns]="columns" [hasCloseButton]="true"
+          (closed)="close()" tableTitle="Load Points" subTitle="View load points attached to {{
+            powerSourceRowData.name
+          }} Power Station">
+        </app-table>
+      </div>
+    </div>
+  </div>
+</div>

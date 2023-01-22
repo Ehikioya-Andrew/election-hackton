@@ -1,0 +1,32 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-4 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%">
+                    <nb-card-header class="font-weight-bold">
+                        {{(title ? title : 'CAUTION') | uppercase}}
+                    </nb-card-header>
+                    <nb-card-body>
+                        <p *ngIf="showReadCarefully" class="subtitle">Please read the following carefully:</p>
+                        <p>{{context}}</p>
+                    </nb-card-body>
+                    <nb-card-footer>
+                        <div class="row">
+                            <div class="col-6">
+                                <button (click)="close()" size="small" [autofocus]="false" nbButton fullWidth
+                                    status="danger">
+                                    Close
+                                </button>
+                            </div>
+                            <div class="col-6">
+                                <button (click)="confirm()" size="small" autofocus nbButton fullWidth status="success">
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

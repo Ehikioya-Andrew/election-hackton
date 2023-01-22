@@ -1,0 +1,33 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row m-0">
+    <div class="col-12">
+      <app-table *ngIf="loadPoints.length; else noData" [isLoading]="isLoadingData" tableTitle="Load Points"
+        subTitle="Manage all assets consuming energy from power stations" [data]="loadPoints" [columns]="columns"
+        [showEdit]="permissionService.canAccessByResource('update', loadPointResources.UpdateLoadPoint)"
+        (requestData)="requestData($event)" (optionsSelected)="updateLoadPoint($event)"
+        [showAdd]="permissionService.canAccessByResource('create', loadPointResources.CreateLoadPoint)"
+        (addClicked)="handleCreateNewLoadPointClick()">
+
+        <button [routerLink]="[loadPointAnalyticsLink]" nbButton outline>
+          View Analytics
+          <nb-icon icon="pie-chart-outline"></nb-icon>
+        </button>
+      </app-table>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+                !loadPoints.length && isLoadingData
+                  ? "Loading Records ..."
+                  : "No Data to display"
+              }}
+      </h6>
+    </div>
+  </div>
+</ng-template>

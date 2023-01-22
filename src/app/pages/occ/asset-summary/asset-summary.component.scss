@@ -1,0 +1,34 @@
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include media-breakpoint-up(xl) {
+    li {
+      line-height: 1.5rem;
+    }
+  }
+
+nb-layout-column{
+padding: 10px !important;
+overflow: hidden;
+}
+.map-content-card{
+  transition: fade 0.5s;
+}
+
+::ng-deep .scrollable-container{
+  height: 100vh;
+  overflow: hidden;
+}
+
+  ::ng-deep div.map-container {
+      border-radius: var(--card-border-radius) !important;
+  }
+  ::ng-deep .gm-style-iw.gm-style-iw-c {
+    min-height: 50px !important;
+    min-width: 3% !important;
+  }
+
+  .loader-div{
+    position: relative;
+    top: 30%;
+  }

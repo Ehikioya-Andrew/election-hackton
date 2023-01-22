@@ -1,0 +1,36 @@
+svg{
+    path.updated-base {
+        fill: var(--color-warning-600)
+    }
+    .updated-dark {
+        fill: var(--color-warning-700)
+    }
+    filter: grayscale(0.5);
+}
+svg.success{
+    path.updated-base {
+        fill: var(--color-success-600)
+    }
+    .updated-dark {
+        fill: var(--color-success-700)
+    }
+    filter: grayscale(0.5);
+}
+svg.danger{
+    path.updated-base {
+        fill: var(--color-danger-600)
+    }
+    .updated-dark {
+        fill: var(--color-danger-700)
+    }
+    filter: grayscale(0.5);
+}
+svg.primary{
+    path.updated-base {
+        fill: var(--color-primary-600)
+    }
+    .updated-dark {
+        fill: var(--color-primary-700)
+    }
+    filter: grayscale(0.5);
+}

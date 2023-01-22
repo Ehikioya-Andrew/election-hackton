@@ -1,0 +1,38 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td,
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+.itemValue,
+.itemValue4,
+.itemValue2,
+.itemValue3 {
+    position: absolute;
+    right: 2rem;
+    font-size: larger;
+    font-weight: bolder;
+}
+list-item-line-height {
+    line-height: 1rem;
+}
+nb-list-item:first-child {
+    border-top: 0ch;
+}
+nb-list-item:last-child {
+    border-bottom: 0ch;
+}
+
+nb-list-item p {
+    margin: 0px;
+}

@@ -1,0 +1,118 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h6">Settings</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <form [formGroup]="analyticsForm" #form="ngForm" class="my-3">
+                            <div class="form-control-group row my-3">
+
+                            </div>
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-startDate">Start Date:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="startDate" id="input-startDate"
+                                        placeholder="Date Range:" #startDate [nbDatepicker]="startDateTimePicker"
+                                        [status]="analyticsForm.controls['startDate'].touched ? (analyticsForm.controls['startDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="startDate" autofocus>
+                                    <nb-date-timepicker singleColumn [step]="10" #startDateTimePicker></nb-date-timepicker>
+                                    <div *ngIf="analyticsForm.controls['startDate'].invalid && analyticsForm.controls['startDate'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="analyticsForm.controls['startDate'].errors?.required">
+                                            Start Date is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-endDate">End Date:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="endDate" id="input-endDate"
+                                        placeholder="End Date:" #endDate [nbDatepicker]="endDateTimePicker"
+                                        [status]="analyticsForm.controls['endDate'].touched ? (analyticsForm.controls['endDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="endDate" autofocus>
+                                    <nb-date-timepicker singleColumn [step]="10" #endDateTimePicker>
+                                    </nb-date-timepicker>
+                                    <div *ngIf="analyticsForm.controls['endDate'].invalid && analyticsForm.controls['endDate'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="analyticsForm.controls['endDate'].errors?.required">
+                                            End Date is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="!isSummary" class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-locationId">Location:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-form-field>
+                                        <nb-icon nbPrefix [icon]="'search-outline'" pack="eva">
+                                        </nb-icon>
+                                        <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                                            placeholder="Search for location" [nbAutocomplete]="auto"
+                                            [status]="analyticsForm.controls['location'].touched ? (analyticsForm.controls['location'].invalid ? 'danger' : 'success') : 'basic'"
+                                            formControlName="location" autofocus>
+                                        <button nbSuffix nbButton ghost type="button"
+                                            (click)="clearLocationSelection()">
+                                            <nb-icon [icon]="'close-outline'" pack="eva">
+                                            </nb-icon>
+                                        </button>
+                                    </nb-form-field>
+                                    <div *ngIf="analyticsForm.controls['location'].invalid && analyticsForm.controls['location'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="analyticsForm.controls['location'].errors?.required">
+                                            Location is required!
+                                        </small>
+                                    </div>
+                                    <nb-autocomplete #auto>
+                                        <nb-option (click)="onSelectionChange(option)"
+                                            *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                                            <div>
+                                                Location:
+                                                <span class="text-capitalize">
+                                                    {{ option.name }}
+                                                </span>
+                                                <br *ngIf="option.meter">
+                                                <span class="caption-2" *ngIf="option.meter">Meter Number:
+                                                    <b>
+                                                        {{option.meter}}
+                                                    </b>
+                                                </span>
+                                            </div>
+                                        </nb-option>
+                                    </nb-autocomplete>
+                                </div>
+                            </div>
+                        </form>
+                    </nb-card-body>
+
+                    <nb-card-footer>
+                        <button (click)="confirm()" nbButton fullWidth status="primary"
+                            [disabled]="isLoading || !analyticsForm.valid">
+                            Confirm
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

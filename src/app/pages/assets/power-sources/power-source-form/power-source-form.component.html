@@ -1,0 +1,207 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h5">{{isCreateRequest ? 'Create' : 'Update'}} Power Station </div>
+                            <div class="col ml-auto text-right">
+                                <button [disabled]="submitted" (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <nb-alert *ngIf="errors?.length && !submitted" outline="danger" role="alert">
+                            <p class="alert-title"><b>Oh snap!</b></p>
+                            <ul class="alert-message-list">
+                                <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+                            </ul>
+                        </nb-alert>
+
+                        <nb-alert *ngIf=" messages?.length && !submitted" outline="success" role="alert">
+                            <p class="alert-title"><b>Hooray!</b></p>
+                            <ul class="alert-message-list">
+                                <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+                            </ul>
+                        </nb-alert>
+
+                        <form [formGroup]="powerSourceForm" #form="ngForm" class="my-3">
+
+                            <p class="font-weight-bold">Info</p>
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-powerSourceName">Name:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input nbInput fullWidth name="name" id="input-name" placeholder="Name" #name
+                                        [status]="powerSourceForm.controls['name'].touched ? (powerSourceForm.controls['name'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="name" autofocus>
+
+                                    <div *ngIf="powerSourceForm.controls['name'].invalid && powerSourceForm.controls['name'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['name'].errors?.required">
+                                            Name is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="font-weight-bold mt-4">GIS</p>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-PowerSourceLatitude">Latitude:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input nbInput fullWidth name="latitude" id="input-latitude" placeholder="Latitude"
+                                        #latitude (keypress)="keyPressNumbersOnly($event)"
+                                        [status]="powerSourceForm.controls['latitude'].touched ? (powerSourceForm.controls['latitude'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="latitude" autofocus>
+
+                                    <div *ngIf="powerSourceForm.controls['latitude'].invalid && powerSourceForm.controls['latitude'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['latitude'].errors?.required">
+                                            Latitude is required!
+                                        </small>
+                                        <small xyz="fade down" class="error-message d-block"
+                                        *ngIf="!powerSourceForm.controls['latitude'].errors?.required">
+                                        {{powerSourceForm.controls['latitude'].errors?.invalidLatitude}}
+                                    </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-powerSourceLongitude">Longitude:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input nbInput fullWidth name="longitude" id="input-longitude"
+                                        placeholder="Longitude" #longitude (keypress)="keyPressNumbersOnly($event)" 
+                                        [status]="powerSourceForm.controls['longitude'].touched ? (powerSourceForm.controls['longitude'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="longitude" autofocus>
+
+                                    <div *ngIf="powerSourceForm.controls['longitude'].invalid && powerSourceForm.controls['longitude'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['longitude'].errors?.required">
+                                            Longitude is required!
+                                        </small>
+                                        <small xyz="fade down" class="error-message d-block"
+                                        *ngIf="!powerSourceForm.controls['longitude'].errors?.required">
+                                        {{powerSourceForm.controls['longitude'].errors?.invalidLongitude}}
+                                    </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="font-weight-bold mt-4">Location</p>
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-countryId">Country:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select fullWidth
+                                        [status]="powerSourceForm.controls['countryId'].touched ? (powerSourceForm.controls['countryId'].invalid ? 'danger' : 'success') : 'basic'"
+                                        placeholder="Select Country" formControlName="countryId">
+                                        <nb-option *ngFor="let country of countries$ | async; let i=count"
+                                            [value]="country.id">
+                                            {{country.name }}
+                                        </nb-option>
+                                    </nb-select>
+
+                                    <div *ngIf="powerSourceForm.controls['countryId'].invalid && powerSourceForm.controls['countryId'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['countryId'].errors?.required">
+                                            Country is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-stateId">State:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select fullWidth
+                                        [status]="powerSourceForm.controls['stateId'].touched ? (powerSourceForm.controls['stateId'].invalid ? 'danger' : 'success') : 'basic'"
+                                        placeholder="Select State" formControlName="stateId">
+                                        <nb-option *ngFor="let state of states$ | async; let i=count"
+                                            [value]="state.id">
+                                            {{state.name }}
+                                        </nb-option>
+                                    </nb-select>
+                                   
+                                    <div *ngIf="powerSourceForm.controls['stateId'].invalid && powerSourceForm.controls['stateId'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['stateId'].errors?.required">
+                                            State is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-lgaId">LGA:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select fullWidth
+                                        [status]="powerSourceForm.controls['lgaId'].touched ? (powerSourceForm.controls['lgaId'].invalid ? 'danger' : 'success') : 'basic'"
+                                        placeholder="Select LGA" formControlName="lgaId">
+                                        <nb-option *ngFor="let area of areas$ | async; let i=count" [value]="area.id">
+                                            {{area.name }}
+                                        </nb-option>
+                                    </nb-select>
+                                  
+                                    <div *ngIf="powerSourceForm.controls['lgaId'].invalid && powerSourceForm.controls['lgaId'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['lgaId'].errors?.required">
+                                            LGA is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row mb-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-address">Address:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <textarea fullWidth rows="3" nbInput type="text" placeholder="Address" class="form-control"
+                                        formControlName="address"
+                                        [status]="powerSourceForm.controls['address'].touched ? (powerSourceForm.controls['address'].invalid ? 'danger' : 'success') : 'basic'">
+                                        </textarea>
+                                   
+                                    <div *ngIf="powerSourceForm.controls['address'].invalid && powerSourceForm.controls['address'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="powerSourceForm.controls['address'].errors?.required">
+                                            Address is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </nb-card-body>
+                    <nb-card-footer>
+                        <button (click)="isCreateRequest ? savePowerSource() : updatePowerSource()" [nbSpinner]="submitted"
+                            nbButton fullWidth status="success" [disabled]="submitted || !powerSourceForm.valid">
+                            {{isCreateRequest ? 'Save' : 'Update'}}
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

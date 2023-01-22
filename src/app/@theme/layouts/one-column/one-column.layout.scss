@@ -1,0 +1,41 @@
+@import "../../styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include nb-install-component() {
+  nb-layout-column:fullscreen {
+    overflow: auto;
+  }
+
+  nb-layout-column {
+      &::-webkit-scrollbar {
+        width: var(--layout-scrollbar-width);
+        height: var(--layout-scrollbar-width);
+      }
+      &:-webkit-scrollbar-thumb {
+        background: var(--layout-scrollbar-color) !important;
+        cursor: pointer;
+        border-radius: var(--layout-scrollbar-width) / 2;
+      }
+      &::-webkit-scrollbar-track {
+        background: var(--layout-scrollbar-background-color) !important;
+    }
+  }
+
+  .menu-sidebar ::ng-deep .scrollable {
+    padding-top: nb-theme(layout-padding-top);
+  }
+
+  nb-sidebar {
+    --sidebar-padding: var(--sidebar-padding) 0 var(--sidebar-padding) 0;
+  }
+
+  .offline-alert {
+    --alert-padding: 0.3rem 1.125rem;
+    --alert-bottom-margin: 1rem;
+  }
+
+  nb-alert {
+    background-color: var(--background-basic-color-1);
+  }
+}

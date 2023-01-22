@@ -1,0 +1,9 @@
+<nb-tag-list>
+
+  <nb-tag *ngIf="rowData.hasBillingData === true" size="small" appearance="filled" text="True" status="success">
+  </nb-tag>
+
+  <nb-tag *ngIf="rowData.hasBillingData === false" size="small" appearance="filled" text="False" status="danger">
+  </nb-tag>
+
+</nb-tag-list>

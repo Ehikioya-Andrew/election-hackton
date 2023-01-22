@@ -1,0 +1,158 @@
+@import "../../@theme/styles/themes";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+.flowchart-container {
+  nb-card-body {
+    div.chart {
+      max-height: calc(100vh - 350px);
+    }
+  }
+}
+
+nb-card {
+  --card-border-radius: 5px;
+  width: 100%;
+  --card-scrollbar-background-color: nb-theme(background-color-default);
+  --card-scrollbar-width: 0rem;
+}
+
+.consumption-card,
+.generation-card {
+  box-shadow: 0px 4px 10px rgba(64, 70, 66, 0.25);
+  border: none;
+  // animation: beat 2s infinite alternate;
+  // transform-origin: center;
+  // @keyframes beat {
+  //   to {
+  //     transform: scale(1.078);
+  //   }
+  // }
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+.consumption-card {
+  background-color: nb-theme(color-danger-default);
+}
+
+.generation-card {
+  background-color: nb-theme(color-success-default);
+}
+
+.energy-card-content {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.powerstation-container {
+  background-color: rgba(80, 124, 222, 0.15);
+  height: 62vh;
+  --card-divider-color: nb-theme(background-color-default);
+}
+
+nb-card.powerstation-card {
+  background-color: nb-theme(color-primary-default);
+  box-shadow: 0px 6px 10px -5px rgba(64, 70, 66, 0.25);
+  border: none;
+  cursor: pointer;
+  &:hover {
+    transform: scale(0.98);
+  }
+}
+
+.powerstation-card2 {
+  background-color: nb-theme(color-primary-default);
+  box-shadow: 0px 6px 10px -5px rgba(64, 70, 66, 0.25);
+}
+
+.powersource-loadpoint-section,
+.powersource-genset-section,
+.powersource-section2 {
+  height: 63vh;
+  --card-divider-color: nb-theme(background-color-default);
+  overflow-y: scroll;
+}
+
+.powersource-loadpoint-section {
+  background-color: rgba(80, 124, 222, 0.3);
+}
+
+.powersource-genset-section {
+  background-color: rgba(226, 127, 127, 0.15);
+}
+
+.powersource-section2 {
+  background-color: var(--layout-background-color);
+}
+
+.powerstation-loadpoint-card,
+.powerstation-genSet-card,
+.powerstation-section2-card {
+  // border-radius: 5px;
+  &:hover {
+    animation-direction: forwards;
+    transform: scale(1.03);
+  }
+}
+.powerstation-loadpoint-card,
+.powerstation-genSet-card {
+  background-color: nb-theme(card-background-color);
+}
+
+a {
+  cursor: pointer;
+}
+
+.powerstation-section2-card {
+  background-color: rgba(80, 124, 222, 0.3);
+  cursor: pointer;
+}
+@include media-breakpoint-up(xxl) {
+  nb-card.powerstation-card {
+  }
+}
+@include media-breakpoint-down(xl) {
+  .powerstation-card nb-card-body {
+    overflow-x: hidden;
+    padding: 0.5rem;
+  }
+
+  .energy-card-content h5 {
+    font-size: 12px;
+  }
+  .energy-card-content h4 {
+    font-size: 16px;
+  }
+
+  .powerstation-card .p-card-title {
+    font-size: 14px;
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    line-height: 14px;
+  }
+  .powerstation-card .p {
+    font-size: 12px;
+  }
+  .powerstation-card span {
+    font-size: 12px;
+  }
+  .cons-row {
+    margin-top: 2px;
+  }
+  .kw {
+    font-size: 10px;
+  }
+
+  .powerstation-loadpoint-card,
+  .powerstation-genSet-card,
+  .powerstation-section2-card {
+    .h6 {
+      font-size: 14px;
+    }
+  }
+}

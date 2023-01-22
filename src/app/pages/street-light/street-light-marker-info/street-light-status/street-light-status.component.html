@@ -1,0 +1,7 @@
+<nb-tag-list *ngIf="value !== undefined; else empty">
+    <nb-tag size="small" appearance="outline" [text]="statusText" [status]="statusColor"></nb-tag>
+</nb-tag-list>
+
+<ng-template #empty>
+    <span>-</span>
+</ng-template>

@@ -1,0 +1,125 @@
+<div class="container-fluid p-0 m-0">
+  <div class="row" style="margin-bottom: 15px">
+    <form class="form-inline col-12" [formGroup]="searchForm">
+      <div class="col-lg-6">
+        <h4 *ngIf="!isMobile">Street Light Dashboard</h4>
+        <h6 *ngIf="isMobile">Street Light Dashboard</h6>
+      </div>
+      <div class="col-lg-4 ml-auto col-md-12 col-sm-12 col-xs-12">
+        <nb-form-field class="input">
+          <nb-icon nbPrefix [icon]="'search-outline'" class="nb-icon-size" pack="eva"></nb-icon>
+          <input autocomplete="off" nbInput fullWidth name="location" id="input-location" [disabled]="canSelectOption"
+            placeholder="Search for location" [status]="
+              searchForm.controls['location'].touched
+                ? searchForm.controls['location'].invalid
+                  ? 'danger'
+                  : 'primary'
+                : 'primary'
+            " formControlName="location" autofocus />
+          <button nbSuffix nbButton ghost type="button" (click)="clearLocationSelection()">
+            <nb-icon [icon]="'close-outline'" class="nb-icon-size" pack="eva">
+            </nb-icon>
+          </button>
+        </nb-form-field>
+      </div>
+    </form>
+  </div>
+    <div class="row m-0">
+        <div class="col-12">
+            <nb-card class="p-0 map-card">
+                <nb-card-body class="m-0 p-0">
+                    <app-map
+                        [height]="isMobile? '54vh':'74vh'"
+                        [showSlide]="true"
+                        slideoutWidth="500px"
+                        [showInfoWindow]="false"
+                        [markerModels]="filteredMarkers"
+                        [showSlideOutByDefault]="true"
+                        (selectedMarkerIndexChange)="onSelectedMarkerChange($event)">
+                        <ng-container slideOutContainer [ngTemplateOutlet]="slideOutTpl"></ng-container>
+                    </app-map>
+                    <nb-spinner
+                    size="tiny"
+                    *ngIf="isLoading"
+                    status="primary"
+                    class="header-spinner ml-auto"
+                    style="z-index: 1"
+                    message=""
+                  >
+                  </nb-spinner>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</div>
+
+<ng-template #slideOutTpl>
+    <div class="row">
+        <div class="col align-self-center">
+          <h6 class="mt-3 mb-5 slide-header">
+            Weather Summary
+          </h6>
+          <nb-card background-color="transparent" class="mt-3">
+              <nb-card-body>
+                <div class="col-12 text-center">
+                    <ng-lottie height="150px" [options]="weatherAnimation" (animationCreated)="animationCreated($event)">
+                    </ng-lottie>
+                </div>
+              </nb-card-body>
+              <nb-card-footer class="text-capitalize">{{streetLightWeatherInfo?.weather_description || 'loading...'}}</nb-card-footer>
+          </nb-card>
+          <nb-card>
+              <nb-card-body>
+                  <div class="row pt-2">
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                           Clouds: <b>{{streetLightWeatherInfo?.clouds}}</b>
+                        </p>
+                      </div>
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            Humidity: <b>{{streetLightWeatherInfo?.humidity}}</b>
+                        </p>
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            pressure: <b>{{streetLightWeatherInfo?.pressure}}</b>
+                        </p>
+                      </div>
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            temparature: <b>{{streetLightWeatherInfo?.temparature}}</b>
+                        </p>
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            sunrise: <b>{{streetLightWeatherInfo?.sunrise}}</b>
+                        </p>
+                      </div>
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            sunset: <b>{{streetLightWeatherInfo?.sunset}}</b>
+                        </p>
+                      </div>
+                  </div>
+                  <div class="row mt-3">
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            wind: <b>{{streetLightWeatherInfo?.wind}}</b>
+                        </p>
+                      </div>
+                      <div class="col">
+                        <p class="caption mb-0 text-capitalize">
+                            weather type: <b>{{streetLightWeatherInfo?.weather_type}}</b>
+                        </p>
+                      </div>
+                  </div>
+              </nb-card-body>
+          </nb-card>
+        </div>
+      </div>
+</ng-template>

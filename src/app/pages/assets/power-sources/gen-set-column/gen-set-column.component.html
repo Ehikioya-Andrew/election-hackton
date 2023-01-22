@@ -1,0 +1,5 @@
+<button nbButton fullWidth [disabled]="!rowData.genSetCount" (click)="viewGenSetModal(rowData)" status="primary"
+  size="small" outline>
+  Unit{{(rowData.genSetCount) >= 2 ? 's' : ''}} &nbsp;
+  ({{rowData.genSetCount}})
+</button>

@@ -1,0 +1,198 @@
+<div style="width: 100vw;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 mx-auto">
+        <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+          <nb-card-header class="font-weight-bold pb-1">
+            <div class="row">
+              <div class="col-auto h5">{{isCreateRequest ? 'Create' : 'Update'}} Generating Unit </div>
+              <div class="col ml-auto text-right">
+                <button [disabled]="submitted" (click)="close()" class="p-1" nbButton ghost>
+                  <nb-icon icon="close"></nb-icon>
+                </button>
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <nb-alert *ngIf="errors?.length && !submitted" outline="danger" role="alert">
+              <p class="alert-title"><b>Oh snap!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+              </ul>
+            </nb-alert>
+
+            <nb-alert *ngIf=" messages?.length && !submitted" outline="success" role="alert">
+              <p class="alert-title"><b>Hooray!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+              </ul>
+            </nb-alert>
+
+            <form [formGroup]="generatingSetForm" #form="ngForm" class="my-3">
+
+              <p class="font-weight-bold">Info</p>
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-generatingSetFormName">Name:</label>
+                </div>
+                <div class="col-sm-9">
+                  <input nbInput fullWidth name="name" id="input-name" placeholder="Name" #name
+                    [status]="generatingSetForm.controls['name'].touched ? (generatingSetForm.controls['name'].invalid ? 'danger' : 'success') : 'basic'"
+                    formControlName="name" autofocus>
+
+                  <div *ngIf="generatingSetForm.controls['name'].invalid && generatingSetForm.controls['name'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['name'].errors?.required">
+                      Name is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-meterNumber">Meter Number:</label>
+                </div>
+                <div class="col-sm-9">
+                  <nb-form-field>
+                    <input nbInput fullWidth name="meterNumber" id="input-meterNumber" placeholder="Meter Number"
+                      #meterNumber
+                      [status]="generatingSetForm.controls['meterNumber'].touched ? (generatingSetForm.controls['meterNumber'].invalid ? 'danger' : 'success') : 'basic'"
+                      formControlName="meterNumber" autofocus (keypress)="keyPressNumbersOnly($event)">
+                    <nb-icon *ngIf="generatingSetForm.controls['meterNumber'].status === 'PENDING' " nbSuffix
+                      icon="radio-button-off-outline" [options]="{animation: {type: 'pulse'}}" pack="eva"></nb-icon>
+                  </nb-form-field>
+
+                  <div
+                    *ngIf="generatingSetForm.controls['meterNumber'].invalid && generatingSetForm.controls['meterNumber'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['meterNumber'].errors?.required">
+                      Meter Number is required!
+                    </small>
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['meterNumber'].errors?.meterUnavailable">
+                      {{generatingSetForm.controls['meterNumber'].errors?.meterUnavailable}}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="form-control-group row mb-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-role">Power Station:</label>
+                </div>
+                <div class="col-sm-9">
+                  <nb-select fullWidth
+                    [status]="generatingSetForm.controls['powerSourceId'].touched ? (generatingSetForm.controls['powerSourceId'].invalid ? 'danger' : 'success') : 'basic'"
+                    placeholder="Select Power Station" formControlName="powerSourceId">
+                    <nb-option *ngFor="let role of powersource$ | async; let i=count" [value]="role.id">
+                      {{role.name}}
+                    </nb-option>
+                  </nb-select>
+
+                  <div
+                    *ngIf="generatingSetForm.controls['powerSourceId'].invalid && generatingSetForm.controls['powerSourceId'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['powerSourceId'].errors?.required">
+                      Power Station is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-energySource">Energy Source:</label>
+                </div>
+                <div class="col-sm-9">
+
+                  <nb-select fullWidth
+                    [status]="generatingSetForm.controls['energySource'].touched ? (generatingSetForm.controls['energySource'].invalid ? 'danger' : 'success') : 'basic'"
+                    placeholder="Select Energy Source" formControlName="energySource">
+                    <nb-option *ngFor="let name of EnergySourceEnum" [value]="name[1]">{{name[0]}}</nb-option>
+                  </nb-select>
+
+
+                  <div
+                    *ngIf="generatingSetForm.controls['energySource'].invalid && generatingSetForm.controls['energySource'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['energySource'].errors?.required">
+                      Energy Source is required!
+                    </small>
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['energySource'].errors?.meterUnavailable">
+                      {{generatingSetForm.controls['energySource'].errors?.meterUnavailable}}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <p class="font-weight-bold mt-4">GIS</p>
+
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-genSetLatitude">Latitude:</label>
+                </div>
+                <div class="col-sm-9">
+                  <input nbInput fullWidth name="latitude" id="input-latitude" placeholder="Latitude" #latitude
+                    (keypress)="keyPressNumbersOnly($event)"
+                    [status]="generatingSetForm.controls['latitude'].touched ? (generatingSetForm.controls['latitude'].invalid ? 'danger' : 'success') : 'basic'"
+                    formControlName="latitude" autofocus>
+
+                  <div
+                    *ngIf="generatingSetForm.controls['latitude'].invalid && generatingSetForm.controls['latitude'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['latitude'].errors?.required">
+                      Latitude is required!
+                    </small>
+                    <small xyz="fade down" class="error-message d-block"
+                      *ngIf="!generatingSetForm.controls['latitude'].errors?.required">
+                      {{generatingSetForm.controls['latitude'].errors?.invalidLatitude}}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-genSetLongitude">Longitude:</label>
+                </div>
+                <div class="col-sm-9">
+                  <input nbInput fullWidth name="longitude" id="input-longitude" placeholder="Longitude" #longitude
+                    (keypress)="keyPressNumbersOnly($event)"
+                    [status]="generatingSetForm.controls['longitude'].touched ? (generatingSetForm.controls['longitude'].invalid ? 'danger' : 'success') : 'basic'"
+                    formControlName="longitude" autofocus>
+
+                  <div
+                    *ngIf="generatingSetForm.controls['longitude'].invalid && generatingSetForm.controls['longitude'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="generatingSetForm.controls['longitude'].errors?.required">
+                      Longitude is required!
+                    </small>
+                    <small xyz="fade down" class="error-message d-block"
+                      *ngIf="!generatingSetForm.controls['longitude'].errors?.required">
+                      {{generatingSetForm.controls['longitude'].errors?.invalidLongitude}}
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </nb-card-body>
+          <nb-card-footer>
+            <button (click)="isCreateRequest ? saveGeneratingSet() : updateGeneratingSet()" [nbSpinner]="submitted"
+              nbButton fullWidth status="success" [disabled]="submitted || !generatingSetForm.valid">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

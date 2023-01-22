@@ -1,0 +1,10 @@
+<button nbTooltipPlacement="top"  class="show-hide-toggle" nbButton
+  outline (click)="toggleSlideout()">
+  <nb-icon [icon]="show ? 'arrow-forward-outline' : 'arrow-back-outline'" pack="eva">
+  </nb-icon>
+</button>
+<div class="slide-out-container" [class.expanded]="show" [class.collapsed]="!show">
+  <div class="content-wrapper">
+    <ng-content></ng-content>
+  </div>
+</div>

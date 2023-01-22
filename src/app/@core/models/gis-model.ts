@@ -1,0 +1,6 @@
+export class GisModel {
+    constructor(
+        public latitude: number,
+        public longitude: number,
+    ) { }
+}

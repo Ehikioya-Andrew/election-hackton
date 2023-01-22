@@ -1,0 +1,51 @@
+<div class="container-fluid p-0 m-0">
+
+  <div class="row">
+    <div class="col-12">
+      <nb-card>
+        <nb-card-body>
+          <div class="row align-items-center">
+            <div class="col d-flex align-items-center">
+              <h5>Billing & Comparison
+                <p class="caption mb-0 mt-1 text-capitalize">
+                  View Billing associated with Tariff
+                </p>
+                <p class="caption mb-0 mt-1 text-capitalize" *ngIf="assetType">
+                  Asset Type: <b>{{assetType === 2 ? "Load Point": "Power Source"}}</b>
+                </p>
+                <p class="caption mb-0 mt-1 text-capitalize" *ngIf="date">
+                  Date: <b>{{ date  | date:'MMMM 1, yyyy' }}</b>
+                </p>
+              </h5>
+
+            </div>
+            <div class="col-md-auto my-3 my-md-0 align-items-right">
+              <div>
+                <button nbButton outline status="primary" size="medium" (click)="configureForm()" fullWidth>
+                  <nb-icon icon="settings-2-outline"></nb-icon>
+                  configure
+                </button>
+              </div>
+            </div>
+            <div class="col-md-auto my-3 my-md-0 align-items-right" *ngIf="assetType">
+              <div>
+                <button nbButton outline status="primary" size="medium" (click)="downloadTemplate()" fullWidth>
+                  <nb-icon icon="download-outline"></nb-icon>
+                  Download Template
+                </button>
+              </div>
+            </div>
+            <div class="col-md-auto my-3 my-md-0 align-items-right" *ngIf="assetType">
+              <div>
+                <button nbButton outline status="primary" size="medium" (click)="uploadForm()" fullWidth>
+                  <nb-icon icon="upload-outline"></nb-icon>
+                  Upload
+                </button>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>

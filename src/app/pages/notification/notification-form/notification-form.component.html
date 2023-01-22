@@ -1,0 +1,562 @@
+<div style="width: 100vw;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-8 mx-auto">
+        <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100%; overflow-y: auto;">
+          <nb-card-header class="font-weight-bold pb-1">
+            <div class="row">
+              <div class="col-auto h5">{{isCreateRequest ? 'Create' : 'Update'}} Notification</div>
+              <div class="col ml-auto text-right">
+                <button [disabled]="submitted" (click)="close()" class="p-1" nbButton ghost>
+                  <nb-icon icon="close"></nb-icon>
+                </button>
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+
+            <nb-alert *ngIf="errors?.length && !submitted" outline="danger" role="alert">
+              <p class="alert-title"><b>Oh snap!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+              </ul>
+            </nb-alert>
+
+            <nb-alert *ngIf=" messages?.length && !submitted" outline="success" role="alert">
+              <p class="alert-title"><b>Hooray!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+              </ul>
+            </nb-alert>
+            <form [formGroup]="createNotificationForm" #form="ngForm" class="my-3">
+
+
+              <div class="form-control-group row mb-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-firstName">Notification Type:</label>
+                </div>
+                <div class="col-sm-9">
+                  <nb-select fullWidth placeholder="Select asset type" formControlName="notificationType">
+                    <nb-option (click)="onSelectType()"
+                      *ngFor="let notificationType of notificationTypeName; let i=index" [value]="notificationType.id">
+                      {{notificationType.name}}
+                    </nb-option>
+                  </nb-select>
+                  <!-- input errors -->
+                  <div
+                    *ngIf="createNotificationForm.controls['notificationType'].invalid && createNotificationForm.controls['notificationType'].touched"
+                    class="text-danger xyz-in px-3 row">
+                    <small xyz="fade down" class="error-message"
+                      *ngIf="createNotificationForm.controls['notificationType'].errors?.required">
+                      Notification is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <ng-container *ngIf="notificationType === 1" [formGroup]="createNotificationConsumption">
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-assetType">Asset Type:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-select fullWidth placeholder="Select asset type" formControlName="assetType">
+                      <nb-option (click)="onSelectAssetType(createNotificationConsumption)"
+                        *ngFor="let assetType of AssetTypeComsumption" [value]="assetType[0]">
+                        {{assetType[1]}}
+                      </nb-option>
+                    </nb-select>
+
+                    <div
+                      *ngIf="createNotificationConsumption.controls['assetType'].invalid && createNotificationConsumption.controls['assetType'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationConsumption.controls['assetType'].errors?.required">
+                        Asset type is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-locationId">Location:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-form-field>
+
+
+                      <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                        placeholder="Search for location" [nbAutocomplete]="auto"
+                        [status]="createNotificationConsumption.controls['location'].touched ? (createNotificationConsumption.controls['location'].invalid ? 'danger' : 'success') : 'basic'"
+                        formControlName="location">
+                      <button nbSuffix nbButton ghost type="button"
+                        (click)="clearLocationSelection(createNotificationConsumption)">
+                        <nb-icon [icon]="'close-outline'" pack="eva">
+                        </nb-icon>
+                      </button>
+                    </nb-form-field>
+                    <div
+                      *ngIf="createNotificationConsumption.controls['location'].invalid && createNotificationConsumption.controls['location'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationConsumption.controls['location'].errors?.required">
+                        Location is required!
+                      </small>
+                    </div>
+                    <nb-autocomplete #auto>
+                      <nb-option (click)="onSelectionChange(option.id, createNotificationConsumption)"
+                        *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                        <div>
+                          Location:
+                          <span class="text-capitalize">
+                            {{ option.name }}
+                          </span>
+                        </div>
+                      </nb-option>
+                    </nb-autocomplete>
+                  </div>
+                </div>
+
+                <div class="form-control-group mb-3 row">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-threshold">Threshold (kWh):</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input nbInput fullWidth name="threshold" id="input-threshold" placeholder="Threshold"
+                      [status]="createNotificationConsumption.controls['threshold'].touched ? (createNotificationConsumption.controls['threshold'].invalid ? 'danger' : 'success') : 'basic'"
+                      formControlName="threshold">
+                    <!-- input errors -->
+                    <div
+                      *ngIf="createNotificationConsumption.controls['threshold'].invalid && createNotificationConsumption.controls['threshold'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationConsumption.controls['threshold'].errors?.required">
+                        Threshold is required!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-control-group mb-3 row">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-duration">Duration:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-select fullWidth placeholder="Monthly, Weekly, Daily" formControlName="duration">
+                      <nb-option (click)="onSelectDuration(createNotificationConsumption)"
+                        *ngFor="let notificationDuration of notificationTypeDuration; let i=index"
+                        [value]="notificationDuration[0]">{{notificationDuration[1]}}
+                      </nb-option>
+                    </nb-select>
+                    <!-- input errors -->
+                    <div
+                      *ngIf="createNotificationConsumption.controls['duration'].invalid && createNotificationConsumption.controls['duration'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationConsumption.controls['duration'].errors?.required">
+                        Duration is required!
+                      </small>
+                    </div>
+                    <div class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="text-info info-message font-weight-bold">
+                        {{ noticeMsg }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-control-group mb-3 row">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-date">Notification Date:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input *ngIf="duration !== '1' else timePicker" autocomplete="off" nbInput fullWidth name="date"
+                      id="input-date" placeholder="Select Date:" #startDate [nbDatepicker]="DateTimePicker"
+                      [status]="createNotificationConsumption.controls['date'].touched ? (createNotificationConsumption.controls['date'].invalid ? 'danger' : 'success') : 'basic'"
+                      formControlName="date">
+                    <nb-date-timepicker singleColumn [step]="10" #DateTimePicker>
+                    </nb-date-timepicker>
+                    <ng-template #timePicker>
+                      <input autocomplete="off" nbInput fullWidth name="date" id="input-date" placeholder="Select Date:"
+                        #startDate [nbTimepicker]="DateTimePicker"
+                        [status]="createNotificationConsumption.controls['date'].touched ? (createNotificationConsumption.controls['date'].invalid ? 'danger' : 'success') : 'basic'"
+                        formControlName="date">
+                      <nb-timepicker #DateTimePicker></nb-timepicker>
+                    </ng-template>
+                    <!-- input errors -->
+                    <div
+                      *ngIf="createNotificationConsumption.controls['date'].invalid && createNotificationConsumption.controls['date'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationConsumption.controls['date'].errors?.required">
+                        Date is required!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="form-control-group mb-3 row" *ngIf="userType">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-user">User:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-form-field>
+                      <nb-icon nbPrefix [icon]="'search-outline'" pack="eva">
+                      </nb-icon>
+                      <input nbInput type="text" formControlName="user" placeholder="Select User" class="user-select"
+                        fullWidth
+                        [status]="createNotificationConsumption.controls['user'].touched ? (createNotificationConsumption.controls['user'].invalid ? 'danger' : 'success') : 'basic'"
+                        placeholder="Select User" [nbAutocomplete]="autoUser" />
+                    </nb-form-field>
+
+                    <nb-autocomplete #autoUser>
+
+                      <nb-option *ngFor="let item of filteredOptionUsers$ | async"
+                        (click)="onSelectUser(item, createNotificationConsumption)">
+                        {{ item.firstName}} {{ item.lastName }}
+                      </nb-option>
+                    </nb-autocomplete>
+
+                    <!-- input errors -->
+                    <div *ngIf="!userArray.length && createNotificationConsumption.controls['user'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message" *ngIf="!userArray.length">
+                        User is required!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="userType && notificationType === 1">
+                  <div class="col-9 offset-3">
+                    <nb-card *ngIf="userArray.length" class="scroll-overflow">
+                      <nb-card-body>
+
+                        <nb-tag-list (tagRemove)="onTagRemove($event)">
+                          <nb-tag removable *ngFor="let user of userArray" [text]="user['name']" [size]="'tiny'">
+                          </nb-tag>
+                        </nb-tag-list>
+
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+                </div>
+
+
+              </ng-container>
+
+              <ng-container *ngIf="notificationType === 2" [formGroup]="createNotificationOutage">
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-assetType">Asset Type:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-select fullWidth placeholder="Select asset type" formControlName="assetType">
+                      <nb-option (click)="onSelectAssetType(createNotificationOutage)"
+                        *ngFor="let assetType of AssetTypeOutage; let i=index" [value]="assetType[0]">
+                        {{assetType[1]}}
+                      </nb-option>
+                    </nb-select>
+
+                    <div
+                      *ngIf="createNotificationOutage.controls['assetType'].invalid && createNotificationOutage.controls['assetType'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationOutage.controls['assetType'].errors?.required">
+                        Asset type is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-locationId">Location:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-form-field>
+                      <nb-icon nbPrefix [icon]="'search-outline'" pack="eva">
+                      </nb-icon>
+                      <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                        placeholder="Search for location" [nbAutocomplete]="autoOutage" formControlName="location">
+                      <button nbSuffix nbButton ghost type="button"
+                        (click)="clearLocationSelection(createNotificationOutage)">
+                        <nb-icon [icon]="'close-outline'" pack="eva">
+                        </nb-icon>
+                      </button>
+                    </nb-form-field>
+                    <!-- <div *ngIf="createNotificationOutage.controls['location'].invalid && createNotificationOutage.controls['location'].touched"
+                                            class="text-danger xyz-in px-3 row">
+                                            <small xyz="fade down" class="error-message"
+                                                *ngIf="createNotificationOutage.controls['location'].errors?.required">
+                                                Location is required!
+                                            </small>
+                                        </div> -->
+                    <nb-autocomplete #autoOutage>
+                      <nb-option (click)="onSelectionChange(option.id, createNotificationOutage)"
+                        *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                        <div>
+                          Location:
+                          <span class="text-capitalize">
+                            {{ option.name }}
+                          </span>
+                        </div>
+                      </nb-option>
+                    </nb-autocomplete>
+                  </div>
+                </div>
+
+                <div class="form-control-group mb-3 row" *ngIf="userType">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-user">User:</label>
+                  </div>
+                  <div class="col-sm-9">
+
+                    <input nbInput type="text" formControlName="user" placeholder="Select User" class="user-select"
+                      fullWidth
+                      [status]="createNotificationOutage.controls['user'].touched ? (createNotificationOutage.controls['user'].invalid ? 'danger' : 'success') : 'basic'"
+                      placeholder="Select User" [nbAutocomplete]="autoUser" [autofocus]="false" />
+
+                    <nb-autocomplete #autoUser>
+
+                      <nb-option *ngFor="let item of filteredOptionUsers$ | async"
+                        (click)="onSelectUser(item, createNotificationOutage)">
+                        {{ item.firstName}} {{ item.lastName }}
+                      </nb-option>
+                    </nb-autocomplete>
+                    <!-- input errors -->
+
+                    <div *ngIf="!userArray.length  && createNotificationOutage.controls['user'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message" *ngIf="!!userArray.length ">
+                        User is required!
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="userType && notificationType === 2">
+                  <div class="col-9 offset-3">
+                    <nb-card *ngIf="userArray.length" class="scroll-overflow">
+                      <nb-card-body>
+
+                        <nb-tag-list (tagRemove)="onTagRemove($event)">
+                          <nb-tag removable *ngFor="let user of userArray" [text]=" user['name']" [size]="'tiny'">
+                          </nb-tag>
+                        </nb-tag-list>
+
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+                </div>
+              </ng-container>
+
+
+              <ng-container *ngIf="notificationType === 3" [formGroup]="createNotificationReport">
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-assetType">Asset Type:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-select fullWidth placeholder="Select asset type" formControlName="assetType">
+                      <nb-option (click)="onSelectAssetType(createNotificationReport)"
+                        *ngFor="let assetType of AssetTypeReport; let i=index" [value]="assetType[0]">
+                        {{assetType[1]}}
+                      </nb-option>
+                    </nb-select>
+
+                    <div
+                      *ngIf="createNotificationReport.controls['assetType'].invalid && createNotificationReport.controls['assetType'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationReport.controls['assetType'].errors?.required">
+                        Asset type is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-locationId">Location:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-form-field>
+                      <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                        placeholder="Search for location" [nbAutocomplete]="auto"
+                        [status]="createNotificationReport.controls['location'].touched ? (createNotificationReport.controls['location'].invalid ? 'danger' : 'success') : 'basic'"
+                        formControlName="location">
+                      <button nbSuffix nbButton ghost type="button"
+                        (click)="clearLocationSelection(createNotificationReport)">
+                        <nb-icon [icon]="'close-outline'" pack="eva">
+                        </nb-icon>
+                      </button>
+                    </nb-form-field>
+                    <div
+                      *ngIf="createNotificationReport.controls['location'].invalid && createNotificationReport.controls['location'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationReport.controls['location'].errors?.required">
+                        Location is required!
+                      </small>
+                    </div>
+                    <nb-autocomplete #auto>
+                      <nb-option (click)="onSelectionChange(option.id,createNotificationReport)"
+                        *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                        <div>
+                          Location:
+                          <span class="text-capitalize">
+                            {{ option.name }}
+                          </span>
+                        </div>
+                      </nb-option>
+                    </nb-autocomplete>
+                  </div>
+                </div>
+
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-duration"> Frequency:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <nb-select *ngIf="true" fullWidth placeholder="Monthly, Weekly, daily, hourly"
+                      formControlName="duration">
+                      <nb-option (click)="onSelectDuration(createNotificationReport)"
+                        *ngFor="let notificationFrequency of notificationTypeDuration; let i=index"
+                        [value]="notificationFrequency[0]">
+                        {{notificationFrequency[1]}}
+                      </nb-option>
+                    </nb-select>
+
+                    <div
+                      *ngIf="createNotificationReport.controls['duration'].invalid && createNotificationReport.controls['duration'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationReport.controls['duration'].errors?.required">
+                        Frequency is required
+                      </small>
+                    </div>
+                    <div class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="text-info info-message font-weight-bold">
+                        {{ noticeMsg }}
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-control-group row my-3">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-period">Period - Based on the frequecy
+                      selected:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input *ngIf="duration !== '1' else timePicker" autocomplete="off" nbInput fullWidth name="date"
+                      id="input-date" placeholder="Select Date:" #startDate [nbDatepicker]="DateTimePicker"
+                      [status]="createNotificationReport.controls['date'].touched ? (createNotificationReport.controls['date'].invalid ? 'danger' : 'success') : 'basic'"
+                      formControlName="date">
+                    <nb-date-timepicker singleColumn [step]="10" #DateTimePicker>
+                    </nb-date-timepicker>
+                    <ng-template #timePicker>
+                      <input autocomplete="off" nbInput fullWidth name="date" id="input-date" placeholder="Select Date:"
+                        #startDate [nbTimepicker]="DateTimePicker"
+                        [status]="createNotificationReport.controls['date'].touched ? (createNotificationReport.controls['date'].invalid ? 'danger' : 'success') : 'basic'"
+                        formControlName="date">
+                      <nb-timepicker #DateTimePicker></nb-timepicker>
+                    </ng-template>
+
+                    <div
+                      *ngIf="createNotificationReport.controls['date'].invalid && createNotificationReport.controls['date'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message"
+                        *ngIf="createNotificationReport.controls['date'].errors?.required">
+                        Period - Based is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-control-group row my-3" *ngIf="userType">
+                  <div class="col-sm-3">
+                    <label class="label" for="input-user">User:</label>
+                  </div>
+                  <div class="col-sm-9">
+                    <input nbInput type="text" formControlName="user" placeholder="Select User" class="user-select"
+                      fullWidth
+                      [status]="createNotificationReport.controls['user'].touched ? (createNotificationReport.controls['user'].invalid ? 'danger' : 'success') : 'basic'"
+                      placeholder="Select User" [nbAutocomplete]="autoUser" />
+
+                    <nb-autocomplete #autoUser>
+
+                      <nb-option *ngFor="let item of filteredOptionUsers$ | async"
+                        (click)="onSelectUser(item, createNotificationReport)">
+                        {{ item.firstName}} {{ item.lastName }}
+                      </nb-option>
+                    </nb-autocomplete>
+
+
+                    <!-- input errors -->
+                    <div *ngIf="!userArray.length && createNotificationReport.controls['user'].touched"
+                      class="text-danger xyz-in px-3 row">
+                      <small xyz="fade down" class="error-message" *ngIf="!userArray.length">
+                        User is required
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="userType && notificationType === 3">
+                  <div class="col-9 offset-3">
+                    <nb-card *ngIf="userArray.length" class="scroll-overflow">
+                      <nb-card-body>
+
+                        <nb-tag-list (tagRemove)="onTagRemove($event)">
+                          <nb-tag size="tiny" removable *ngFor="let user of userArray" [text]=" user['name']"
+                            [size]="'tiny'">
+                          </nb-tag>
+                        </nb-tag-list>
+
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+                </div>
+              </ng-container>
+            </form>
+          </nb-card-body>
+          <nb-card-footer *ngIf="!userType">
+            <button *ngIf="notificationType === 1" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted   || !createNotificationForm.valid || !createNotificationConsumption.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+
+            <button *ngIf="notificationType === 2" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted || !createNotificationForm.valid || !createNotificationOutage.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+
+            <button *ngIf="notificationType === 3" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted  || !createNotificationForm.valid || !createNotificationReport.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+          </nb-card-footer>
+          <nb-card-footer *ngIf="userType">
+            <button *ngIf="notificationType === 1" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted ||  !userArray.length  || !createNotificationForm.valid || !createNotificationConsumption.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+
+            <button *ngIf="notificationType === 2" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted || !userArray.length  || !createNotificationForm.valid || !createNotificationOutage.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+
+            <button *ngIf="notificationType === 3" (click)="isCreateRequest ? saveNotification() : updateNotification()"
+              [nbSpinner]="submitted" nbButton fullWidth status="success"
+              [disabled]="submitted  || !userArray.length || !createNotificationForm.valid || !createNotificationReport.valid ">
+              {{isCreateRequest ? 'Save' : 'Update'}}
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

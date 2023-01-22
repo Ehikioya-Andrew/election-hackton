@@ -1,1 +1,32 @@
-@import "~@nebular/theme/styles/prebuilt/dark.css";
+@import "./@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+::ng-deep .nb-theme-dark {
+  --image-filter-color: invert(1);
+  nb-card.dialog {
+    backdrop-filter: blur(20px) !important;
+    --card-background-color: rgba(100, 141, 223, 0.07);
+  }
+}
+::ng-deep .nb-theme-default {
+  --image-filter-color: invert(0);
+}
+
+@include media-breakpoint-down(md) {
+  ::ng-deep .nb-theme-dark {
+    nb-card.dialog {
+      backdrop-filter: blur(30px) !important;
+      --card-background-color: rgba(46, 58, 89, 0.4);
+    }
+  }
+}
+
+::ng-deep .flip-card {
+  .front-container {
+    width: 100%;
+  }
+  .back-container {
+    width: 100%;
+  }
+}

@@ -1,0 +1,51 @@
+@import "~@nebular/theme/styles/global/breakpoints";
+
+::ng-deep ng2-smart-table-pager {
+    display: block !important;
+}
+
+::ng-deep .ng2-smart-page-link {
+    font-weight: 500;
+}
+
+::ng-deep .ng2-smart-pagination {
+    margin-bottom: 0;
+}
+
+::ng-deep .ng2-smart-sort-link {
+    color: var(--text-basic-color) !important;
+}
+
+::ng-deep ng2-smart-table-title {
+    --smart-table-header-font-weight: 700;
+}
+
+@include media-breakpoint-down(sm) {
+    ::ng-deep .ng2-smart-page-link {
+        padding: 8px 12px !important;
+    }
+}
+
+.header-spinner {
+    --spinner-primary-background-color: transparent;
+}
+
+::ng-deep .table-icon {
+    font-size: large;
+}
+
+::ng-deep .form-control {
+    background-color: var(--input-basic-background-color);
+    border-color: var(--input-basic-border-color);
+    color: var(--input-basic-text-color);
+}
+
+::ng-deep .form-control:focus {
+    background-color: var(--input-basic-background-color);
+    border-color: var(--input-basic-border-color);
+    color: var(--input-basic-text-color);
+}
+
+::ng-deep td {
+    height: 50px !important;
+}

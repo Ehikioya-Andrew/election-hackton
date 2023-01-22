@@ -1,0 +1,129 @@
+<!-- All Power Source -->
+<div *ngIf="formData && formData.assetType === assetType.POWER_SOURCE.toString() && !formData.locationId" class="row m-0">
+    <div class="col-12 p-0">
+        <app-table [tableOnly]="false"
+            [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData" tableTitle="Power Stations"
+            subTitle="View reports for all Power Stations" [data]="powerSourceReportDto" [columns]="powerSourceColumns"
+            (requestData)="requestPowerSourceData($event)">
+        </app-table>
+    </div>
+</div>
+<!-- Power Source By Id -->
+<div *ngIf="formData && formData.assetType === assetType.POWER_SOURCE.toString() && formData.locationId" class="row m-0">
+    <div class="col-md-12 p-0">
+        <div class="row">
+            <div class="col-md-6">
+                <nb-card style="height: 25rem;">
+                    <nb-card-header>
+                        <h6>Demand Summary</h6>
+                    </nb-card-header>
+                        <nb-list>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-power (1).png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Max. Power Demand
+                                    <span class="itemValue">{{(powerSourceIdSummary.maxPowerDemand?
+                                        powerSourceIdSummary.maxPowerDemand: 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/socket.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Min. Power Demand <span
+                                        class="itemValue2">{{(powerSourceIdSummary.minPowerDemand?
+                                        powerSourceIdSummary.minPowerDemand: 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-tower.png"
+                                        style="width: 30px;" alt="">
+                                    Av. Power Demand <span class="itemValue3">{{(powerSourceIdSummary.averagePowerDemand?
+                                        powerSourceIdSummary.averagePowerDemand: 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electricity.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp; Energy Demand<span
+                                        class="itemValue4">{{(powerSourceIdSummary.totalEnergyDemand?
+                                        powerSourceIdSummary.totalEnergyDemand: 0)|number: '1.2-2'}}KWH</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/utility.png"
+                                        style="width: 30px;" alt="">
+                                    Utilization<span class="itemValue3">{{(powerSourceIdSummary.utilization?
+                                        powerSourceIdSummary.utilization: 0)|percent}}</span>
+                                </p>
+                            </nb-list-item>
+                        </nb-list>
+                </nb-card>
+            </div>
+            <div class="col-md-6">
+                <nb-card style="height: 25rem;">
+                    <nb-card-header>
+                        <h6>Supply Summary</h6>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <nb-list>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-power (1).png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Max. Power Supply
+                                    <span class="itemValue">{{(powerSourceIdSummary.maxPowerSupply?
+                                        powerSourceIdSummary.maxPowerSupply: 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/socket.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Min. Power Supply <span
+                                        class="itemValue2">{{(powerSourceIdSummary.minPowerSupply?
+                                        powerSourceIdSummary.minPowerSupply: 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-tower.png"
+                                        style="width: 30px;" alt="">
+                                    Av. Power Supply <span class="itemValue3">{{(powerSourceIdSummary.averagePowerSupply?
+                                        powerSourceIdSummary.averagePowerSupply : 0)|number: '1.2-2'}}KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electricity.png"
+                                        style="width: 30px;" alt="">
+                                    Total Energy Supply <span
+                                        class="itemValue3">{{(powerSourceIdSummary.totalEnergySupply?
+                                        powerSourceIdSummary.totalEnergySupply: 0)|number: '1.2-2'}}KWH</span>
+                                </p>
+                            </nb-list-item>
+                        </nb-list>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-12 p-0">
+        <app-table *ngIf="reportPerPowerSourceLoadPoint" [tableOnly]="false" [showAdd]="false" [pageLength]="5" [showEdit]="false" [isLoading]="isLoadingData"
+        tableTitle="Attached Load Points" [data]="reportPerPowerSourceLoadPoint" [columns]="powerSourceLoadPointColumns"
+            (requestData)="requestPowerSourceydByIdData($event)">
+        </app-table>
+    </div>
+    <div class="col-12 p-0">
+        <app-table *ngIf="reportPerPowerSourceGensetDto" [tableOnly]="false"
+            [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData" tableTitle="Attached Generating Units"
+            [data]="reportPerPowerSourceGensetDto" [columns]="powerSourceGenSetColumns"
+            (requestData)="requestPowerSourceydByIdData($event)" [pageLength]="5">
+        </app-table>
+    </div>
+</div>

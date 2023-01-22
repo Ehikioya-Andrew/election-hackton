@@ -1,0 +1,17 @@
+<app-audit-block (auditDownloadCSV)="downloadAuditLogsCSV()" (auditDownloadPDF)="downloadAuditLogsPDF()"
+  [isDownloading]="isDownloading" (optionSelected)="showTable($event)"></app-audit-block>
+<div *ngIf="auditDto.length" class="row">
+  <div class="col-12">
+    <app-table [isLoading]="isLoadingData" (requestData)="requestData($event)" tableTitle="Audit"
+      subTitle="View Audit logs in the system" [data]="auditDto" [columns]="columns" [showEdit]="false"
+      [showAdd]="false">
+    </app-table>
+  </div>
+</div>
+<div class="row m-0 mt-5" *ngIf="!auditDto.length">
+  <div class="col-lg-3 col-md-4 col-8 mx-auto">
+    <ng-lottie width="100%" [options]="options">
+    </ng-lottie>
+    <h6 class="text-secondary text-center">Loading records ...</h6>
+  </div>
+</div>

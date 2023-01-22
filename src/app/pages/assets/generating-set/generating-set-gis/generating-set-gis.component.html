@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-md-6">
+    <a nbTooltip="View on Maps" nbTooltipStatus="success"
+      href="https://www.google.com/maps/?q={{rowData.latitude}},{{rowData.latitude}}" nbButton status="success"
+      size="small" outline target="_blank" rel="noopener noreferrer">
+      <nb-icon icon="map-outline" pack="eva"></nb-icon>
+    </a>
+  </div>
+  <div class="col-md-6">
+    <a nbTooltip="View Analytics" nbTooltipStatus="success" [routerLink]="[genSetAnalyticsLink]"
+      [queryParams]="{ locationName: rowData.name, locationId: rowData.id, startDate: monthStart, endDate: currentDate }"
+      nbButton size="small" outline>
+      <nb-icon icon="pie-chart-outline" pack="eva"></nb-icon>
+    </a>
+  </div>
+</div>

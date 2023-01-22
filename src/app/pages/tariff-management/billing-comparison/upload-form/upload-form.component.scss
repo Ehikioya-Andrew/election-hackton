@@ -1,0 +1,17 @@
+
+@import '../../../../@theme/styles/themes.scss';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+:host ::ng-deep ngx-dropzone-preview { 
+    max-width: 200px !important; max-height: 100px !important; width:100% important; margin: 0 auto !important;   
+}
+
+:host ::ng-deep ngx-dropzone-label{
+    padding: 50px !important;
+}
+ngx-dropzone {
+    margin: 20px;
+    background: var(--bg1) !important;
+}
+  

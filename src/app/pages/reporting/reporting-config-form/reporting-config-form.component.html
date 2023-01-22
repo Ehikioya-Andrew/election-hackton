@@ -1,0 +1,141 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                    <nb-card-header class="font-weight-bold pb-1">
+                        <div class="row">
+                            <div class="col-auto h6">Settings 2</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <form [formGroup]="reportingForm" #form="ngForm" class="my-3">
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-assetType">Asset Type:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-select *ngIf="reportingForm" fullWidth placeholder="Select asset type"
+                                        formControlName="assetType">
+                                        <nb-option (click)="onSelectAssetType()"
+                                            *ngFor="let assetType of assetTypeName; let i=index" [value]="assetType[0]">
+                                            {{assetType[1]}}
+                                        </nb-option>
+                                    </nb-select>
+
+                                    <div *ngIf="reportingForm.controls['assetType'].invalid && reportingForm.controls['assetType'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="reportingForm.controls['assetType'].errors?.required">
+                                            Asset type is required
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-locationId">Location:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <nb-form-field>
+                                        <nb-icon nbPrefix [icon]="'search-outline'" pack="eva">
+                                        </nb-icon>
+                                        <input autocomplete="off" nbInput fullWidth name="location" id="input-location"
+                                            placeholder="Search for location" [nbAutocomplete]="auto"
+                                            (input)="onChange($event)"
+                                            [status]="reportingForm.controls['location'].touched ? (reportingForm.controls['location'].invalid ? 'danger' : 'success') : 'basic'"
+                                            formControlName="location" autofocus>
+                                        <button nbSuffix nbButton ghost type="button"
+                                            (click)="clearLocationSelection()">
+                                            <nb-icon [icon]="'close-outline'" pack="eva">
+                                            </nb-icon>
+                                        </button>
+                                    </nb-form-field>
+                                    <div *ngIf="reportingForm.controls['location'].invalid && reportingForm.controls['location'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="reportingForm.controls['location'].errors?.required">
+                                            Location is required!
+                                        </small>
+                                    </div>
+                                    <nb-autocomplete #auto>
+                                        <nb-option (click)="onSelectionChange(option)"
+                                            *ngFor="let option of filteredOptions$ | async" [value]="option.name">
+                                            <div>
+                                                Location:
+                                                <span class="text-capitalize">
+                                                    {{ option.name }}
+                                                </span>
+                                                <br *ngIf="option.meter">
+                                                <span class="caption-2" *ngIf="option.meter">Meter Number:
+                                                    <b>
+                                                        {{option.meter}}
+                                                    </b>
+                                                </span>
+                                            </div>
+                                        </nb-option>
+                                    </nb-autocomplete>
+                                </div>
+                            </div>
+
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-startDate">Start Date:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="startDate" id="input-startDate"
+                                        placeholder="Date Range:" #startDate [nbDatepicker]="startDateTimePicker"
+                                        [status]="reportingForm.controls['startDate'].touched ? (reportingForm.controls['startDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="startDate" autofocus>
+                                    <nb-date-timepicker singleColumn [step]="10" #startDateTimePicker></nb-date-timepicker>
+                                    <div *ngIf="reportingForm.controls['startDate'].invalid && reportingForm.controls['startDate'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="reportingForm.controls['startDate'].errors?.required">
+                                            Start Date is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-control-group row my-3">
+                                <div class="col-sm-3">
+                                    <label class="label" for="input-endDate">End Date:</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input autocomplete="off" nbInput fullWidth name="endDate" id="input-endDate"
+                                        placeholder="End Date:" #endDate [nbDatepicker]="endDateTimePicker"
+                                        [status]="reportingForm.controls['endDate'].touched ? (reportingForm.controls['endDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                        formControlName="endDate" autofocus>
+                                    <nb-date-timepicker singleColumn [step]="10" #endDateTimePicker>
+                                    </nb-date-timepicker>
+                                    <div *ngIf="reportingForm.controls['endDate'].invalid && reportingForm.controls['endDate'].touched"
+                                        class="text-danger xyz-in px-3 row">
+                                        <small xyz="fade down" class="error-message"
+                                            *ngIf="reportingForm.controls['endDate'].errors?.required">
+                                            End Date is required!
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </nb-card-body>
+
+                    <nb-card-footer>
+                        <button (click)="loadTable()" nbButton fullWidth status="primary"
+                            [disabled]="isLoading || !reportingForm.valid">
+                            Confirm
+                        </button>
+                    </nb-card-footer>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

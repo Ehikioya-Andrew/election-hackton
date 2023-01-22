@@ -1,0 +1,41 @@
+@import "./themes";
+
+@mixin nb-overrides() {
+  nb-select.size-medium button {
+    padding: 0.4375rem 2.2rem 0.4375rem 1.125rem !important;
+
+    nb-icon {
+      right: 0.41rem !important;
+    }
+  }
+
+  nb-select.size-tiny button {
+    padding: 0.4375rem 2.2rem 0.4375rem 1.125rem !important;
+    color: #074ee8 !important;
+    border: 1px solid transparent !important;
+    background: #fff !important;
+    text-align: right !important;
+    nb-icon {
+      right: 0.41rem !important;
+    }
+  }
+
+  .gm-style-iw.gm-style-iw-c {
+    background-color: var(--card-background-color);
+    min-height: 20vh !important;
+    min-width: 5% !important;
+    padding-right: 12px !important;
+  }
+  .gm-style .gm-style-iw-t::after {
+    background: var(--card-background-color) !important;
+  }
+  .gm-style-iw-d {
+    overflow: auto !important;
+  }
+
+  .gm-ui-hover-effect {
+    filter: var(--image-filter-color) !important;
+    top: 0px !important;
+    right: 5px !important;
+  }
+}

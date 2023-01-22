@@ -1,0 +1,25 @@
+<nb-layout withScroll>
+  <nb-layout-header fixed>
+    <app-header></app-header>
+  </nb-layout-header>
+
+  <nb-sidebar [right]="(directionService.onDirectionChange() | async) === 'rtl'" class="menu-sidebar" tag="menu-sidebar"
+    responsive>
+    <ng-content select="nb-menu"></ng-content>
+  </nb-sidebar>
+
+  <nb-layout-column [ngClass]="{'pt-0': (onlineStat.isOnlineSub.asObservable() | async) === false}" id="layoutColumn">
+    <div fixed class="col-12">
+      <nb-alert *ngIf="(onlineStat.isOnlineSub.asObservable() | async) === false"
+        class="text-center paragraph-2 xyz-in offline-alert mt-3" xyz="fade up back-5 delay-2 duration-10"
+        outline="basic">
+        You are offline
+      </nb-alert>
+    </div>
+    <ng-content select="router-outlet"></ng-content>
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <app-footer></app-footer>
+  </nb-layout-footer>
+</nb-layout>

@@ -1,0 +1,89 @@
+<!-- All Genearting Set -->
+<div *ngIf="formData && formData.assetType === assetType.GEN_SET.toString() && !formData.locationId" class="row m-0">
+    <div class="col-12 p-0">
+        <app-table [tableOnly]="false"
+            [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData" tableTitle="Generating Units"
+            subTitle="View all generating units reports" [data]="genSetReportDto" [columns]="generatingSetColumns"
+            (requestData)="requestGenSetData($event)">
+        </app-table>
+    </div>
+</div>
+<!-- Generating Set By Id -->
+<div *ngIf="formData && formData.assetType === assetType.GEN_SET.toString() && formData.locationId" class="row m-0">
+    <div class="col-md-12 p-0">
+        <div class="row">
+            <div class="col-md-6">
+                <nb-card style="height: 17rem;">
+                    <nb-card-header>
+                        Power Summary
+                    </nb-card-header>
+                        <nb-list>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-power (1).png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Max. Power Demand
+                                    <span class="itemValue">{{(genSetIdSummary.maxPowerDemand? genSetIdSummary.maxPowerDemand: 0)| number: '1.2-2'}} KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/socket.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Min. Power Demand <span class="itemValue2">{{(genSetIdSummary.minPowerDemand? genSetIdSummary.minPowerDemand: 0) |number: '1.2-2' }}
+                                    KW</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/electric-tower.png"
+                                        style="width: 30px;" alt="">
+                                    Av. Power Demand <span class="itemValue3">{{(genSetIdSummary.averagePowerDemand? genSetIdSummary.averagePowerDemand: 0)|number: '1.2-2' }}
+                                        &nbsp;KW</span>
+                                </p>
+                            </nb-list-item>
+                        </nb-list>
+                </nb-card>
+            </div>
+            <div class="col-md-6">
+                <nb-card style="height: 17rem;">
+                    <nb-card-header>
+                       Energy Summary
+                    </nb-card-header>
+                        <nb-list>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/energy.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Total Energy Supply <span
+                                        class="itemValue2">{{(genSetIdSummary.totalEnergySupply? genSetIdSummary.totalEnergySupply: 0)|number: '1.2-2' }} KWH</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/naira.png"
+                                        style="width: 30px;" alt="">
+                                    &nbsp;Total Energy Cost
+                                    <span class="itemValue">{{(genSetIdSummary.totalEnergyCost? genSetIdSummary.totalEnergyCost: 0 )|currency: '₦'}}</span>
+                                </p>
+                            </nb-list-item>
+                            <nb-list-item>
+                                <p>
+                                    <img class="xyz-in text-center" src="../../../assets/images/money-bag.png"
+                                        style="width: 30px;" alt="">
+                                    Tariff <span class="itemValue3">{{(genSetIdSummary.tariff? genSetIdSummary.tariff: 0)|currency: '₦'}}</span>
+                                </p>
+                            </nb-list-item>
+                        </nb-list>
+                </nb-card>
+            </div>
+        </div>
+       </div>
+    <div class="col-12 p-0">
+        <app-table [tableOnly]="false" [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData"
+        tableTitle="Breakdown" subTitle="View breakdown report for {{genSetIdSummary?.name}} generating unit"
+            [data]="reportPerGenSetDto" [columns]="generatingSetColumnsById"
+            (requestData)="requestGenSetDataById($event)">
+        </app-table>
+    </div>
+</div>

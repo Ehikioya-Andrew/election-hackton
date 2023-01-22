@@ -1,0 +1,25 @@
+<div class="container p-0 p-sm-1" style="height: 100%;">
+    <div xyz="fade down-1 flip-up-2 flip-left-2 duration-20 delay-2 stagger ease-in-out-back" style="height: 100%;"
+        class="row align-content-center justify-content-center">
+        <div class="col-md-6 col-lg-8 col-12 mx-auto">
+
+            <div class="col-12">
+                <ng-lottie height="300px" [options]="options" (animationCreated)="animationCreated($event)">
+                </ng-lottie>
+            </div>
+            <div class="col-12 text-center">
+                <h1 class="title xyz-in">
+                    App Locked!
+                </h1>
+                <p class="sub-title mb-1 xyz-in">Your session expired due to inactivity.</p>
+                <p class="sub-title mb-0 p xyz-in">Login again to continue</p>
+            </div>
+            <div class="col-12 text-center">
+                <div class="my-5">
+                    <a [routerLink]="['/auth/login']" outline nbButton fullWidth status="info">Login <nb-icon
+                            icon="camera-outline"></nb-icon></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

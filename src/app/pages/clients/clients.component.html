@@ -1,0 +1,12 @@
+<div class="container-fluid p-0 m-0">
+    <div class="row m-0">
+        <div class="col-12">
+            <app-table [isLoading]="isLoadingData" tableTitle="Clients" [data]="clients" [columns]="columns"
+                (requestData)="requestData($event)" (optionsSelected)="updateClient($event)"
+                [showEdit]="permissionService.canAccessByResource('update', clientResources.UpdateClient)"
+                [showAdd]="permissionService.canAccessByResource('create', clientResources.CreateClient)"
+                (addClicked)="handleCreateNewClientClick()">
+            </app-table>
+        </div>
+    </div>
+</div>

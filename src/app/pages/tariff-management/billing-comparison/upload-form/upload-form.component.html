@@ -1,0 +1,72 @@
+<div style="width: 100vw;">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-12 mx-auto">
+        <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+          <nb-card-header class="font-weight-bold pb-1">
+            <div class="row">
+              <div class="col-auto h6">Upload</div>
+              <div class="col ml-auto text-right">
+                <button (click)="close()" class="p-1" nbButton ghost>
+                  <nb-icon icon="close"></nb-icon>
+                </button>
+              </div>
+
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <nb-alert *ngIf="errors?.length" outline="danger" closable (close)="onClose(alerts)">
+              <p class="alert-title"><b>Oh snap!</b></p>
+              <ul class="alert-message-list">
+                  <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+              </ul>
+          </nb-alert>
+
+          <nb-alert *ngIf=" messages?.length" outline="success" role="alert">
+              <p class="alert-title"><b>Hooray!</b></p>
+              <ul class="alert-message-list">
+                  <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+              </ul>
+          </nb-alert>
+
+            <div class="form-control-group row my-3">
+              <div class="col-sm-12">
+                <div *ngIf="uploadData.length">
+                  <app-table tableTitle="Document Upload Preview" [data]="uploadData" [columns]="columns"
+                    [tableOnly]="false" [showAdd]="false" [showEdit]="false">
+                    <div class="col-auto ml-auto text-right" *ngIf="showReset">
+                      <button (click)="resetFile()" class="p-2" nbButton status="primary">
+                        <nb-icon icon="refresh"></nb-icon>Reset File
+                      </button>
+                    </div>
+                  </app-table>
+                </div>
+
+                <ngx-dropzone *ngIf="isUploaded" (change)="onSelect($event)" [disabled]="disable" accept="text/csv">
+                  <ngx-dropzone-label>Drop a File Here!</ngx-dropzone-label>
+                  <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                    <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                  </ngx-dropzone-preview>
+                </ngx-dropzone>
+                <div class="col">
+                  <div class="my-3">
+                    <nb-progress-bar *ngIf="uploadProgress > 0" size="tiny" [value]="uploadProgress" [status]="status"
+                      [displayValue]="true">
+                    </nb-progress-bar>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button (click)="uploadFile()" nbButton
+            [nbSpinner]="submitted"
+            fullWidth status="primary" [disabled]="!disable || submitted">
+              Upload
+            </button>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+    </div>
+  </div>
+</div>

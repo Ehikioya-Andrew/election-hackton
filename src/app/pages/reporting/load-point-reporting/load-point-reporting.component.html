@@ -1,0 +1,90 @@
+<!-- View all loadpoints -->
+<div *ngIf="formData && formData.assetType === assetType.LOADPOINT.toString() && !formData.locationId" class="row m-0">
+    <div class="col-12 p-0">
+        <app-table [tableOnly]="false" [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData"
+        tableTitle="Load Points" subTitle="View all load points report" [data]="loadPointsReportDto"
+            [columns]="loadPointsColumns" (requestData)="requestLoadPointData($event)">
+        </app-table>
+    </div>
+</div>
+<!-- Load Point By Id -->
+<div *ngIf="formData && formData.assetType === assetType.LOADPOINT.toString() && formData.locationId" class="row m-0">
+    <div class="col-md-12 p-0">
+        <div class="row">
+            <div class="col-md-6">
+                <nb-card style="min-height: 16rem;">
+                    <nb-card-header>
+                        Power Summary
+                    </nb-card-header>
+                    <nb-list>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/electric-power (1).png"
+                                    style="width: 30px;" alt="">
+                                &nbsp;Max. Power Demand
+                                <span class="itemValue">{{(loadpointIdSummary.maxPowerDemand?
+                                    loadpointIdSummary.maxPowerDemand: 0)| number: '1.2-2'}} kW</span>
+                            </p>
+                        </nb-list-item>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/socket.png"
+                                    style="width: 30px;" alt="">
+                                &nbsp;Min. Power Demand <span class="itemValue2">{{(loadpointIdSummary.minPowerDemand?
+                                    loadpointIdSummary.minPowerDemand: 0) | number: '1.2-2'}} kW</span>
+                            </p>
+                        </nb-list-item>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/electric-tower.png"
+                                    style="width: 30px;" alt="">
+                                Av. Power Demand <span class="itemValue3">{{(loadpointIdSummary.averagePowerDemand?
+                                    loadpointIdSummary.averagePowerDemand : 0) | number: '1.2-2'}} kW</span>
+                            </p>
+                        </nb-list-item>
+                    </nb-list>
+                </nb-card>
+            </div>
+            <div class="col-md-6">
+                <nb-card style="height: 16rem;">
+                    <nb-card-header>
+                        Energy Summary
+                    </nb-card-header>
+                    <nb-list>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/socket.png"
+                                    style="width: 30px;" alt="">
+                                &nbsp;Energy Demand <span class="itemValue2">{{(loadpointIdSummary.totalEnergyDemand?
+                                    loadpointIdSummary.totalEnergyDemand: 0) | number: '1.2-2' }} kWh</span>
+                            </p>
+                        </nb-list-item>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/naira.png"
+                                    style="width: 30px;" alt="">
+                                Energy Cost <span class="itemValue3">{{(loadpointIdSummary.totalEnergyCost?
+                                    loadpointIdSummary.totalEnergyCost: 0 )|currency:'₦'}}</span>
+                            </p>
+                        </nb-list-item>
+                        <nb-list-item>
+                            <p>
+                                <img class="xyz-in text-center" src="../../../assets/images/money-bag.png"
+                                    style="width: 30px;" alt="">
+                                Tariff <span class="itemValue3">{{(loadpointIdSummary.tariff? loadpointIdSummary.tariff:
+                                    0) | currency:'₦'}}</span>
+                            </p>
+                        </nb-list-item>
+                    </nb-list>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 p-0">
+        <app-table [tableOnly]="false" [showAdd]="false" [showEdit]="false" [isLoading]="isLoadingData"
+        tableTitle="Breakdown" subTitle="View breakdown report for {{loadpointIdSummary?.name}} loadpoint"
+            [data]="reportPerLoadPointsDto" [columns]="loadPointByIdColumns"
+            (requestData)="requestLoadPointDataById($event)">
+        </app-table>
+    </div>
+</div>

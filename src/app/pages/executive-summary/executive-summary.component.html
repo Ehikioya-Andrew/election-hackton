@@ -1,0 +1,367 @@
+<div class="container-fluid p-0 m-0">
+  <div *ngIf="!isGensetLoadpointView" class="row">
+    <div class="col-12">
+      <nb-card>
+        <nb-card-body>
+          <div class="row align-items-center">
+            <div class="col d-flex align-items-center">
+              <h5 class="mb-md-0">
+                Executive Summary Dashboard
+                <p class="caption mb-0 mt-1">
+                  Date Range:
+                  <b>{{ selectedStartDate ?? startDate | date }} -
+                    {{ selectedEndDate ?? endDate | date }}</b>
+                </p>
+              </h5>
+            </div>
+
+            <div class="col-md-auto my-3 my-md-0 d-flex">
+              <div>
+                <button nbButton outline status="primary" size="medium" (click)="configureForm()" fullWidth>
+                  <nb-icon icon="calendar-outline"></nb-icon>
+                  Select Date
+                </button>
+              </div>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="powerSourceData.length && !isGensetLoadpointView; else noData">
+    <div class="col-md-3 col-lg-3 col-sm-12 d-flex flex-column">
+      <ng-container [ngTemplateOutlet]="energyGenerated"></ng-container>
+      <ng-container [ngTemplateOutlet]="energyConsumed"></ng-container>
+    </div>
+
+    <div class="col-md-9 col-lg-9 col-sm-12">
+      <ng-container [ngTemplateOutlet]="powerStationsS"></ng-container>
+    </div>
+  </div>
+
+  <div *ngIf="powerSourceData.length && isGensetLoadpointView">
+    <div class="row ml-2 mb-5">
+      <button nbButton default (click)="goToMainView()">
+        <nb-icon icon="arrow-back-outline" pack="eva" style="font-size: 20px">
+        </nb-icon>Back
+      </button>
+    </div>
+
+    <div class="row">
+      <ng-container [ngTemplateOutlet]="gensetLoadpoint"></ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #energyGenerated>
+  <nb-card class="generation-card xyz-in h-100" xyz="fade up-25%">
+    <nb-card-body>
+      <div class="energy-card-content">
+        <h5 class="text-white xyz-in mb-0" xyz="fade down-25%">
+          Total Energy Generation
+        </h5>
+
+        <h4 class="text-white xyz-in" xyz="fade down-25%">
+          <b>{{ (totalGenerated | number: "1.0-0") ?? 0 }}</b>
+
+          <span style="font-size: 14px"> kWh</span>
+
+        </h4>
+
+        <h5 class="text-white xyz-in mt-3 mb-0" xyz="fade down-25%">
+          Total Cost Generation
+        </h5>
+
+        <h4 class="text-white xyz-in" xyz="fade down-25%">
+          <b>{{ (totalGeneratedCost |currency:'₦ ') }}</b>
+
+        </h4>
+      </div>
+
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+
+<ng-template #energyConsumed>
+  <nb-card class="consumption-card xyz-in h-100" xyz="fade down-25%">
+    <nb-card-body>
+      <div class="energy-card-content">
+        <h5 class="text-white xyz-in mb-0" xyz="fade down-25%">
+          Total Energy Consumption
+        </h5>
+
+        <h4 class="text-white xyz-in" xyz="fade down-25%">
+          <b>{{ (totalConsumption | number: "1.0-0") ?? 0 }}</b>
+
+          <span style="font-size: 14px"> kWh</span>
+        </h4>
+
+        <h5 class="text-white xyz-in mt-3 mb-0" xyz="fade down-25%">
+          Total Cost Consumption
+        </h5>
+
+        <h4 class="text-white xyz-in" xyz="fade down-25%">
+          <b>{{ (totalConsumedCost | currency:'₦ ') }}</b>
+
+        </h4>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+
+<ng-template #powerStationsS>
+  <nb-card class="powerstation-container">
+    <nb-card-header>
+      <h6 class="text-primary">Power Stations</h6>
+    </nb-card-header>
+
+    <nb-card-body class="row">
+      <div *ngFor="let powerSource of newPowerStationWIthAnimateAction" class="col-md-5 col-lg-6 col-sm-6">
+        <nb-card class="powerstation-card xyz-in" xyz="fade up-25%" [@fade]="powerSource?.animateCard"
+          (click)="animStateClick(powerSource)">
+          <nb-card-body>
+            <div class="mt-2 mb-3 text-white h5 text-capitalize p-card-title">
+              {{ powerSource?.name }}
+            </div>
+
+            <div class="row align-items-center">
+              <div class="col-5 p text-white">Generation:</div>
+
+              <div class="col-7 text-white">
+                <span class="h5 text-white">{{
+                  (powerSource?.generated | number: "1.0-0") ?? 0
+                }}</span><span class="kw"> kWh</span>
+              </div>
+            </div>
+
+            <div class="row align-items-center cons-row">
+              <div class="col-5 text-white p">Consumption:</div>
+
+              <div class="col-7">
+                <span class="h5 text-white">{{
+                  (powerSource?.consumed | number: "1.0-0") ?? 0
+                }}</span><span class="text-white kw"> kWh</span>
+              </div>
+            </div>
+            <div class="row align-items-center cons-row">
+              <div class="col-5 text-white p">Generated Cost:</div>
+
+              <div class="col-7">
+                <span class="h5 text-white">{{
+                  (powerSource?.generatedCost)|currency:'₦ '
+                }}</span>
+              </div>
+            </div>
+            <div class="row align-items-center cons-row">
+              <div class="col-5 text-white p">Consumed Cost:</div>
+
+              <div class="col-7">
+                <span class="h5 text-white">{{
+                  (powerSource?.consumedCost)|currency:'₦ '
+                }}</span>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+
+<ng-template #gensetLoadpoint>
+  <div class="col-md-4 col-lg-4 col-sm-12">
+    <h6 class="ml-2">Power Stations</h6>
+
+    <nb-card class="powersource-section2">
+      <nb-card-body>
+        <div *ngFor="let powerSource of newPowerStationWIthAnimateAction">
+          <nb-card class="powerstation-section2-card xyz-in" xyz="fade up-25%"
+            [@backGroundAnimation]="powerSource?.backgroundColor" (click)="showPowersourceLoadPoint(powerSource)">
+            <nb-card-body>
+              <div class="my-1 h6 text-capitalize text-white">
+                {{ powerSource?.name }}
+              </div>
+
+              <div class="row align-items-center">
+                <div class="col h6 caption text-white">Generation:</div>
+
+                <div class="col">
+                  <span class="ml-2 h6 text-white">{{
+                    (powerSource?.generated | number: "1.0-0") ?? 0
+                  }}</span><span class="text-white kw"> kWh</span>
+                </div>
+              </div>
+
+              <div class="row align-items-center">
+                <div class="col h6 caption text-white">Consumption:</div>
+
+                <div class="col">
+                  <span class="ml-2 h6 text-white">{{
+                    (powerSource?.consumed | number: "1.0-0") ?? 0
+                  }}</span><span class="text-white kw"> kWh</span>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col h6 caption text-white">Generated Cost:</div>
+
+                <div class="col">
+                  <span class="ml-2 h6 text-white">{{
+                    (powerSource?.generatedCost |currency:'₦ ')
+                  }}</span>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col h6 caption text-white">Consumed Cost:</div>
+
+                <div class="col">
+                  <span class="ml-2 h6 text-white">{{
+                    (powerSource?.consumedCost |currency:'₦ ')
+                  }}</span>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+
+  <!-- Power Source Gen set  -->
+  <div *ngIf="powerSourceGenSetData.length; else noPowerSourceGenSet" class="col-md-4 col-lg-4 col-sm-12">
+    <h6>Generating Units</h6>
+
+    <nb-card class="powersource-genset-section">
+      <nb-card-body>
+        <div *ngFor="let genSet of powerSourceGenSetData">
+          <nb-card class="powerstation-genSet-card xyz-in" xyz="fade up-25%" style="background-color: #f5f5f5">
+            <nb-card-body>
+              <div class="my-1 h6 text-capitalize" style="color: #404642">
+                {{ genSet?.name }}
+              </div>
+
+              <div class="row align-items-center">
+                <div class="col-5 p caption">Generation:</div>
+
+                <div class="col-7">
+                  <span class="ml-2 h6" style="color: #404642">{{
+                    (genSet?.consumption | number: "1.0-0") ?? 0
+                  }}</span><span kw style="color: #404642;"> kWh</span>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-5 p caption">Cost:</div>
+
+                <div class="col-7">
+                  <span class="ml-2 h6" style="color: #404642">{{
+                    (genSet?.cost |currency:'₦ ')
+                  }}</span>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <button nbButton status="primary" outline (click)="viewGenSetTable(selectedPowerSource)">View all</button>
+  </div>
+
+  <!-- Power Source Load point -->
+
+  <div *ngIf="powerSourceLoadPointData.length; else noPowersourceLoadpoint" class="col-md-4 col-lg-4 col-sm-12">
+    <h6>Load Points</h6>
+
+    <nb-card class="powersource-loadpoint-section">
+      <nb-card-body>
+        <div *ngFor="let loadpoint of powerSourceLoadPointData">
+          <nb-card style="background-color: #ffffff" class="powerstation-loadpoint-card xyz-in" xyz="fade up-25%">
+            <nb-card-body>
+              <div class="my-1 h6 text-capitalize" style="color: #222b45">
+                {{ loadpoint?.name }}
+              </div>
+
+              <div class="row align-items-center">
+                <div class="col-5 p caption">Consumption:</div>
+
+                <div class="col-7" style="color: #222b45">
+                  <span class="ml-2 h6" style="color: #222b45">{{
+                  (loadpoint?.consumption | number: "1.0-0") ?? 0
+                }}</span><span kw> kWh</span>
+                </div>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-5 p caption">Cost:</div>
+
+                <div class="col-7">
+                  <span class="ml-2 h6" style="color: #404642">{{
+                  (loadpoint?.cost |currency:'₦ ')
+                }}</span>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <button nbButton status="primary" outline (click)="viewLoadPointTable(selectedPowerSource)">View all</button>
+  </div>
+</ng-template>
+
+<ng-template #noPowerSourceGenSet>
+  <div class="col-md-4 col-lg-4 col-sm-12">
+    <h6>Generating Units</h6>
+
+    <nb-card class="powersource-genset-section">
+      <div class="row m-0 mt-5">
+        <div class="mx-auto">
+          <ng-lottie width="100%" [options]="options"> </ng-lottie>
+
+          <h6 class="text-secondary">No Generating Unit found</h6>
+        </div>
+      </div>
+    </nb-card>
+  </div>
+</ng-template>
+
+<ng-template #noPowersourceLoadpoint>
+  <div class="col-md-4 col-lg-4 col-sm-12">
+    <h6>Load Points</h6>
+
+    <nb-card class="powersource-loadpoint-section">
+      <div class="row m-0 mt-5">
+        <div class="mx-auto">
+          <ng-lottie width="100%" [options]="options"> </ng-lottie>
+
+          <h6 class="text-secondary">No Load Point found</h6>
+        </div>
+      </div>
+    </nb-card>
+  </div>
+</ng-template>
+
+<ng-template #noData>
+  <div *ngIf="!isGensetLoadpointView" class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+          !powerSourceData.length && isloading
+            ? "Loading Records ..."
+            : "No Data to display"
+        }}
+      </h6>
+    </div>
+  </div>
+</ng-template>
+
+<!-- <ng-container *ngIf="powerSourceData.length; else noData">
+  <nb-card
+    style="overflow: auto"
+    class="align-items-center mx-auto flowchart-container"
+  >
+    <nb-card-body>
+      <div class="chart" [innerHtml]="renderedText"></div>
+    </nb-card-body>
+  </nb-card>
+</ng-container> -->

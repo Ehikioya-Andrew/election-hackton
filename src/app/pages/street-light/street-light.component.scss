@@ -1,0 +1,23 @@
+@import "../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include media-breakpoint-down(is) {
+   .slide-header{
+    margin-bottom: 0 !important;
+    font-size: inherit;
+   }
+}
+
+.map-card{
+    border: 10px solid var(--card-background-color);
+    nb-card-body{
+        border-radius: inherit;
+    }
+}
+
+
+.position{
+    position: relative;
+    top: 3px;
+}

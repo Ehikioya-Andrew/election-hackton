@@ -1,0 +1,220 @@
+<!-- Energy Analytics -->
+
+<div class="row">
+  <div class="col-md-9 col-12">
+    <nb-card size="large">
+      <nb-card-header>
+        <div class="row m-0 p-o">
+          <div class="col-md pl-0">
+            <h6>Energy {{ selectCostChart ? "Supply" : "Demand" }}</h6>
+          </div>
+          <div class="col-auto-md">
+            <nb-actions size="small" style="justify-content: center">
+              <nb-action>
+                <button (click)="selectCostChart = false" [status]="!selectCostChart ? 'primary' : 'basic'" nbButton
+                  ghost>
+                  Demand
+                </button>
+              </nb-action>
+              <nb-action>
+                <button (click)="selectCostChart = true" [status]="selectCostChart ? 'primary' : 'basic'" nbButton
+                  ghost>
+                  Energy
+                </button>
+              </nb-action>
+            </nb-actions>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <app-chart *ngIf="!selectCostChart" [notFoundCssClass]="'danger'" [data]="genSetEnergyChartData?.consumption"
+          [config]="{ aspectRatio: 2.9 }" chartType="bar">
+        </app-chart>
+        <app-chart *ngIf="selectCostChart" [notFoundCssClass]="'success'" [data]="genSetEnergyChartData?.cost"
+          [config]="{ aspectRatio: 2.9 }" chartType="bar">
+        </app-chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-3 col-12">
+    <nb-card size="large">
+      <nb-card-header>
+        <h6>Energy Summary</h6>
+      </nb-card-header>
+      <nb-list *ngIf="$GenSetEnergySummary | async as summary; else noSummaryData">
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Energy Supplied</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.totalEnergySupplied | number: "1.2-2" }}
+                <span class="caption"> (kWh) </span>
+              </span>
+            </p>
+          </div>
+        </nb-list-item>
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Max Peak Demand</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.maxPeakDemand | number: "1.2-2" }}</span>
+              <span class="caption"> (kW) </span>
+            </p>
+          </div>
+        </nb-list-item>
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Min Peak Demand</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.minPeakDemand | number: "1.2-2" }}</span>
+              <span class="caption"> (kW) </span>
+            </p>
+          </div>
+        </nb-list-item>
+      </nb-list>
+      <ng-template #noSummaryData>
+        <nb-card-body>
+          <app-not-found-svg [class]="'warning'" width="200px"></app-not-found-svg>
+          <p class="text-center mt-4 mb-0 caption-2">Nothing to show...</p>
+        </nb-card-body>
+      </ng-template>
+    </nb-card>
+  </div>
+</div>
+
+<!-- Power Analytics -->
+<div class="row">
+  <div class="col-md-9 col-12">
+    <nb-flip-card [showToggleButton]="false" [flipped]="flipped">
+      <nb-card-front>
+        <nb-card size="large">
+          <nb-card-header>
+            <div class="row m-0 p-o">
+              <div class="col-md pl-0">
+                <h6>Power Consumption</h6>
+              </div>
+              <div class="col-auto-md">
+                <button status="primary" [nbSpinner]="isLoadingData" nbSpinnerSize="small" [disabled]="isLoadingData"
+                  (click)="toggleFlipFront($event)" nbButton size="small">
+                  Forecast
+                </button>
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <app-chart [notFoundCssClass]="'success'" [data]="$GenSetEnergyConsumptionChartData | async"
+              [config]="{ radius: ['50%', '70%'] }" chartType="bar">
+            </app-chart>
+          </nb-card-body>
+        </nb-card>
+      </nb-card-front>
+      <nb-card-back>
+        <nb-card size="large">
+          <nb-card-header>
+            <div class="row">
+              <div class="col">
+                <button (click)="toggleFlipBlack()" nbButton ghost [disabled]="returnButtonDisable" size="small"
+                  status="primary">
+                  <nb-icon icon="arrow-back-outline"></nb-icon>
+                  Return
+                </button>
+              </div>
+              <div class="col">
+                <h6>Consumption Forecast</h6>
+              </div>
+              <div class="col-auto-md">
+                <form class="form-inline col" [formGroup]="forecastForm">
+                  <nb-select (selectedChange)="setForecastChart($event.target?.value)" placeholder="prediction length"
+                    formControlName="predictionLength" [nbSpinner]="isLoadingData" nbSpinnerSize="large"
+                    nbSpinnerStatus="primary">
+                    <nb-option [value]="1">1 day</nb-option>
+                    <nb-option [value]="3">3 days</nb-option>
+                    <nb-option [value]="5">5 days</nb-option>
+                    <nb-option [value]="7">7 days</nb-option>
+                  </nb-select>
+                </form>
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body *ngIf="forecastChartData; else noForecastData">
+            <app-chart *ngIf="showForecastChart" [data]="forecastChartData" [config]="{ aspectRatio: 2.9 }"
+              chartType="line2" [showSubText]="true">
+            </app-chart>
+          </nb-card-body>
+          <ng-template #noForecastData>
+            <app-not-found-svg [class]="'warning'" width="200px" style="margin-top:20px "></app-not-found-svg>
+            <p class="text-center mt-4 mb-0 caption-2">Nothing to show...</p>
+          </ng-template>
+        </nb-card>
+      </nb-card-back>
+    </nb-flip-card>
+  </div>
+
+  <div class="col-md-3 col-12">
+    <nb-card size="large">
+      <nb-card-header>
+        <h6>Power Summary</h6>
+      </nb-card-header>
+      <nb-list class="justify-content-around" *ngIf="
+          $GenSetPowerDemandChartData | async as summary;
+          else noPowerSummaryData
+        ">
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Avg. Power Demand</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.avgPower | number: "1.2-2" }}
+                <span class="caption"> (kW) </span>
+              </span>
+            </p>
+          </div>
+        </nb-list-item>
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Min Power Demand</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.maxPower | number: "1.2-2" }}
+                <span class="caption"> (kW) </span>
+              </span>
+            </p>
+          </div>
+        </nb-list-item>
+        <nb-list-item>
+          <div class="col">
+            <p class="mt-2">Min Peak Demand</p>
+            <p class="mt-3">
+              <span class="h5">{{ summary.minPower | number: "1.2-2" }}
+                <span class="caption"> (kW) </span>
+              </span>
+            </p>
+          </div>
+        </nb-list-item>
+      </nb-list>
+      <ng-template #noPowerSummaryData>
+        <nb-card-body>
+          <app-not-found-svg [class]="'warning'" width="200px"></app-not-found-svg>
+          <p class="text-center mt-4 mb-0 caption-2">Nothing to show...</p>
+        </nb-card-body>
+      </ng-template>
+    </nb-card>
+  </div>
+</div>
+
+<!-- Uptime and Downtime Analytics -->
+<div class="row">
+  <div class="col-md-12 col-12">
+    <nb-card size="medium">
+      <nb-card-header>
+        <div class="row m-0 p-o">
+          <div class="col-md pl-0">
+            <h6>Up Time VS Down Time</h6>
+          </div>
+        </div>
+      </nb-card-header>
+      <nb-card-body>
+        <app-chart [notFoundCssClass]="'success'" [data]="$GenSetUpDownTimeChartData | async"
+          [config]="{ aspectRatio: 2.9 }" chartType="pie">
+        </app-chart>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

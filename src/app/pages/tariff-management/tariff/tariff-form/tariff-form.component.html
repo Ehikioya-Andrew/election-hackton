@@ -1,0 +1,206 @@
+<div style="width: 100vw">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-lg-6 mx-auto">
+        <nb-card
+          class="xyz-in dialog"
+          xyz="fade down-25%"
+          style="max-height: 100vh; overflow-y: auto"
+        >
+          <nb-card-header class="font-weight-bold pb-1">
+            <div class="row">
+              <div class="col-auto h5">
+                {{ isCreateRequest ? "Create" : "Update" }} Tariff
+              </div>
+              <div class="col ml-auto text-right">
+                <button
+                  [disabled]="submitted"
+                  (click)="close()"
+                  class="p-1"
+                  nbButton
+                  ghost
+                >
+                  <nb-icon icon="close"></nb-icon>
+                </button>
+              </div>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <nb-alert
+              *ngIf="errors?.length && !submitted"
+              outline="danger"
+              role="alert"
+            >
+              <p class="alert-title"><b>Oh snap!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let error of errors" class="alert-message">
+                  {{ error }}
+                </li>
+              </ul>
+            </nb-alert>
+
+            <nb-alert
+              *ngIf="messages?.length && !submitted"
+              outline="success"
+              role="alert"
+            >
+              <p class="alert-title"><b>Hooray!</b></p>
+              <ul class="alert-message-list">
+                <li *ngFor="let message of messages" class="alert-message">
+                  {{ message }}
+                </li>
+              </ul>
+            </nb-alert>
+
+            <form [formGroup]="tariffForm" #form="ngForm" class="my-3">
+              <p class="font-weight-bold">Info</p>
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-tariffFormName">Name:</label>
+                </div>
+                <div class="col-sm-9">
+                  <input
+                    nbInput
+                    fullWidth
+                    name="name"
+                    id="input-name"
+                    placeholder="Name"
+                    #name
+                    [status]="
+                      tariffForm.controls['name'].touched
+                        ? tariffForm.controls['name'].invalid
+                          ? 'danger'
+                          : 'success'
+                        : 'basic'
+                    "
+                    formControlName="name"
+                    autofocus
+                  />
+
+                  <div
+                    *ngIf="
+                      tariffForm.controls['name'].invalid &&
+                      tariffForm.controls['name'].touched
+                    "
+                    class="text-danger xyz-in px-3 row"
+                  >
+                    <small
+                      xyz="fade down"
+                      class="error-message"
+                      *ngIf="tariffForm.controls['name'].errors?.required"
+                    >
+                      Name is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-amount">Amount:</label>
+                </div>
+                <div class="col-sm-9">
+                  <nb-form-field>
+                    <input
+                      nbInput
+                      fullWidth
+                      name="amount"
+                      id="input-amount"
+                      placeholder="Amount"
+                      #amount
+                      [status]="
+                        tariffForm.controls['amount'].touched
+                          ? tariffForm.controls['amount'].invalid
+                            ? 'danger'
+                            : 'success'
+                          : 'basic'
+                      "
+                      formControlName="amount"
+                      autofocus
+                      (keypress)="keyPressNumbersOnly($event)"
+                    />
+                    <nb-icon
+                      *ngIf="tariffForm.controls['amount'].status === 'PENDING'"
+                      nbSuffix
+                      icon="radio-button-off-outline"
+                      [options]="{ animation: { type: 'pulse' } }"
+                      pack="eva"
+                    ></nb-icon>
+                  </nb-form-field>
+
+                  <div
+                    *ngIf="
+                      tariffForm.controls['amount'].invalid &&
+                      tariffForm.controls['amount'].touched
+                    "
+                    class="text-danger xyz-in px-3 row"
+                  >
+                    <small
+                      xyz="fade down"
+                      class="error-message"
+                      *ngIf="tariffForm.controls['amount'].errors?.required"
+                    >
+                      Amount is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-control-group row my-3">
+                <div class="col-sm-3">
+                  <label class="label" for="input-rateClass">Rate Class:</label>
+                </div>
+                <div class="col-sm-9">
+                  <nb-select
+                    fullWidth
+                    [status]="
+                      tariffForm.controls['rateClass'].touched
+                        ? tariffForm.controls['rateClass'].invalid
+                          ? 'danger'
+                          : 'success'
+                        : 'basic'
+                    "
+                    placeholder="Select Rate Class"
+                    formControlName="rateClass"
+                  >
+                    <nb-option [value]="1">Non Maximum Demand</nb-option>
+                    <nb-option [value]="2">Maximum Demand 1</nb-option>
+                    <nb-option [value]="3">Maximum Demand 2</nb-option>
+                  </nb-select>
+
+                  <div
+                    *ngIf="
+                      tariffForm.controls['rateClass'].invalid &&
+                      tariffForm.controls['rateClass'].touched
+                    "
+                    class="text-danger xyz-in px-3 row"
+                  >
+                    <small
+                      xyz="fade down"
+                      class="error-message"
+                      *ngIf="tariffForm.controls['rateClass'].errors?.required"
+                    >
+                      Rate Class is required!
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </nb-card-body>
+          <nb-card-footer>
+            <button
+              (click)="isCreateRequest ? saveTariff() : updateTariff()"
+              [nbSpinner]="submitted"
+              nbButton
+              fullWidth
+              status="success"
+              [disabled]="submitted || !tariffForm.valid"
+            >
+              {{ isCreateRequest ? "Save" : "Update" }}
+            </button>
+          </nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

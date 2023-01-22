@@ -1,0 +1,113 @@
+@import "../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include media-breakpoint-down(is) {
+  .btn-radius {
+    font-size: 10px;
+  }
+
+  ::ng-deep .gm-style-iw.gm-style-iw-c {
+    min-height: 25px !important;
+    min-width: 2% !important;
+    padding: 0rem;
+    padding-right: 0rem !important;
+  }
+
+  .info-marker-container {
+    padding: 0.5rem 0rem 0rem 0rem !important;
+  }
+
+   ul li{
+    font-size: 0.8rem;
+    line-height: 20px !important;
+   }
+
+   .slide-header{
+    margin-bottom: 4px !important;
+    font-size: inherit;
+   }
+   .slide-card-header{
+    font-size: inherit;
+   }
+}
+
+nb-icon {
+  position: relative !important;
+  top: 0px !important ;
+}
+.floatingBar {
+  position: absolute;
+  bottom: 20%;
+  left: 3%;
+}
+.nb-icon-size {
+  position: relative;
+  top: 4px;
+}
+
+.power-source {
+  top: -14px;
+  left: -15px;
+}
+
+.p-l-0 {
+  padding-left: 0px;
+}
+.p-r-0 {
+  padding-right: 0px;
+}
+
+.input {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.btn-radius {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.text {
+  margin: 1rem 0 0;
+  // Set constant line height to prevent text shifting.
+  line-height: nb-theme(text-subtitle-line-height);
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+.text-underline {
+  text-decoration: underline;
+}
+.font-weight-bold {
+  font-size: 13px;
+}
+
+.position {
+  position: relative;
+  top: 3px;
+}
+
+.map-card {
+  border: 10px solid var(--card-background-color);
+  nb-card-body {
+    border-radius: inherit;
+  }
+}
+ul li {
+  line-height: 24px !important;
+}
+
+.info-marker-container {
+  padding: 4px;
+  max-height: 400px;
+  overflow: auto;
+}
+h4{
+  line-height: 1rem !important;
+}
+
+::ng-deep .gm-style-iw.gm-style-iw-c {
+  padding-bottom: 20px !important;
+}

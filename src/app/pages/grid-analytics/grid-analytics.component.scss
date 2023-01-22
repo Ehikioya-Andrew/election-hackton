@@ -1,0 +1,32 @@
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+.iframe-container {
+    width: 100%;
+    height: calc(100vh - 250px);
+    position: relative;
+    margin-top: -65px !important;
+    
+    iframe {
+        border: none;
+        min-width: 99%;
+        max-width: 101%;
+    }
+
+    .hide-header {
+        height: 85px;
+        width: 101%;
+        background: var(--background-basic-color-3);
+        position: absolute;
+    }
+}
+
+.title {
+    z-index: 10;
+}
+
+@media (min-width: 1290px) {  
+    .iframe-container .hide-header {
+        height: 65px;
+        width: 100%;
+    }
+}

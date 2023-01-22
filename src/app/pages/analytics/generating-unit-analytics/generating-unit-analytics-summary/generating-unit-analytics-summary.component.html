@@ -1,0 +1,22 @@
+<div class="row m-0">
+  <div class="col-12 p-0">
+    <app-table *ngIf="generatingUnits.length; else noData" [tableOnly]="false" [showAdd]="false" [showEdit]="false"
+      [isLoading]="isLoadingData" [data]="generatingUnits" [columns]="columns">
+    </app-table>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div class="row m-0 mt-5">
+    <div class="col-lg-3 col-md-4 col-8 mx-auto">
+      <ng-lottie width="100%" [options]="options"> </ng-lottie>
+      <h6 class="text-secondary text-center">
+        {{
+          !generatingUnits.length && isLoadingData
+            ? "Loading Records ..."
+            : "No Data to display"
+        }}
+      </h6>
+    </div>
+  </div>
+</ng-template>

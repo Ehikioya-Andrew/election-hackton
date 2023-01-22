@@ -1,0 +1,84 @@
+<div class="container-fluid p-0 m-0">
+
+    <div class="row">
+        <div class="col-12">
+            <nb-card>
+                <nb-card-body>
+                    <div class="row align-items-center">
+                        <div *ngIf="assetType && locationId; else noLocationIdHeader"
+                            class="col d-flex align-items-center">
+
+                            <h5 *ngIf="+assetType === 0" class="mb-md-0">Load Points Outage
+                                <p class="caption mb-0 mt-1">
+                                    Location: <b>{{locationName | titlecase}}</b>
+                                </p>
+                                <p class="caption mb-0 mt-1">
+                                    Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                </p>
+                            </h5>
+                            <h5 *ngIf="+assetType === 2" class="mb-md-0">Power Stations Outage
+                                <p class="caption mb-0 mt-1">
+                                    Location: <b>{{locationName | titlecase}}</b>
+                                </p>
+                                <p class="caption mb-0 mt-1">
+                                    Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                </p>
+                            </h5>
+                            <h5 *ngIf="+assetType === 1" class="mb-md-0">Generating Units Outage
+                                <p class="caption mb-0 mt-1">
+                                    Location: <b>{{locationName | titlecase}}</b>
+                                </p>
+                                <p class="caption mb-0 mt-1">
+                                    Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                </p>
+                            </h5>
+
+                        </div>
+                        <ng-template #noLocationIdHeader>
+                            <div *ngIf="assetType && !locationId; else noLocationHeader"
+                                class="col d-flex align-items-center">
+                                <h5 *ngIf="+assetType === 0" class="mb-md-0">Load Points Outage
+                                    <p class="caption mb-0 mt-1">
+                                        Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                    </p>
+                                </h5>
+
+                                <h5 *ngIf="+assetType === 1" class="mb-md-0">Generating Units Outage
+                                    <p class="caption mb-0 mt-1">
+                                        Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                    </p>
+                                </h5>
+                            </div>
+                        </ng-template>
+                        <ng-template #noLocationHeader>
+                            <div class="col d-flex align-items-center">
+                                <h5 class="mb-md-0">Outage Analytics
+                                    <p class="caption mb-0 mt-1">
+                                        Date Range: <b>{{startDate | date}} - {{endDate | date}}</b>
+                                    </p>
+
+
+                                </h5>
+                            </div>
+                        </ng-template>
+                        <div *ngIf="(onlineStatus)">
+                            <div class="col-md-auto my-3 my-md-0 align-items-right">
+                                <nb-toggle [checked]="true" status="success" *ngIf="onlineStatus?.onlineSatatus">Power On</nb-toggle>
+                                <nb-toggle [checked]="true"  status="danger" *ngIf="!onlineStatus?.onlineSatatus">Power Off</nb-toggle>
+                            </div>
+                        </div>
+                        <div class="col-md-auto my-3 my-md-0">
+                            <div>
+                                <button nbButton outline status="primary" size="medium" (click)="configureForm()"
+                                    fullWidth>
+                                    <nb-icon icon="settings-2-outline"></nb-icon>
+                                    Configure
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</div>

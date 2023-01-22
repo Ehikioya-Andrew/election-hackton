@@ -1,0 +1,15 @@
+import { LoadPointsComponent } from './load-points.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  {  path: '',
+  component: LoadPointsComponent
+}
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class LoadPointsRoutingModule { }

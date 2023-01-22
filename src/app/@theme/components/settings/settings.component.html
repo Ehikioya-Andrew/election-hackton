@@ -1,0 +1,64 @@
+<div style="width: 100vw;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-6 mx-auto">
+                <nb-card class="xyz-in dialog" xyz="fade down-25%">
+                    <nb-card-header class="font-weight-bold">
+                        <div class="row">
+                            <div class="col">SETTINGS</div>
+                            <div class="col ml-auto text-right">
+                                <button (click)="close()" class="p-1" nbButton ghost>
+                                    <nb-icon icon="close"></nb-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body style="overflow-y: auto;" class="mb-3 px-0">
+                        <nb-tabset class="mb-0 pb-0" fullWidth>
+                            <nb-tab tabTitle="User">
+                                <nb-user class="mt-2 mb-3" [size]="isMobile ? 'medium': 'large'"
+                                    name="{{user.firstName}} {{user.lastName}}">
+                                </nb-user>
+                                <nb-list class="mb-0 pb-0">
+                                    <nb-list-item class="px-0">
+                                        <div class="col-3 col-lg-4">Role:</div>
+                                        <div class="col">{{roleMap.get(user.ssoRole)}}</div>
+                                    </nb-list-item>
+                                    <nb-list-item class="px-0">
+                                        <div class="col-3 col-lg-4">Email:</div>
+                                        <div class="col text-break">{{user.email}}</div>
+                                    </nb-list-item>
+                                    <nb-list-item style="border-bottom: none" class="px-0">
+                                        <div class="col-3 col-lg-4">Phone Number:</div>
+                                        <div class="col text-break">{{user.phoneNumber}}</div>
+                                    </nb-list-item>
+                                </nb-list>
+                                <a class="mt-5" nbButton fullWidth
+                                    [routerLink]="changePasswordUrl">Update
+                                    Password</a>
+                            </nb-tab>
+                            <nb-tab tabTitle="Preferences">
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <p class="subtitle-2">Theme Settings</p>
+                                    </div>
+                                    <div class="col-12 ">
+                                        <div class="row">
+                                            <div class="col align-self-center mr-auto">
+                                                <span>Turn {{isDarkTheme ? 'off' : 'on'}} Dark Mode</span>
+                                            </div>
+                                            <div class="col-auto">
+                                                <nb-toggle [checked]="isDarkTheme" status="primary"
+                                                    (checkedChange)="onThemeChange($event)"></nb-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </nb-tab>
+                        </nb-tabset>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

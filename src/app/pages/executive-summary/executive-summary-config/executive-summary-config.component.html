@@ -1,0 +1,73 @@
+<div style="width: 100vw;">
+  <div class="container">
+      <div class="row">
+          <div class="col-12 col-lg-6 mx-auto">
+              <nb-card class="xyz-in dialog" xyz="fade down-25%" style="max-height: 100vh; overflow-y: auto;">
+                  <nb-card-header class="font-weight-bold pb-1">
+                      <div class="row">
+                          <div class="col-auto h6">Date Config</div>
+                          <div class="col ml-auto text-right">
+                              <button (click)="close()" class="p-1" nbButton ghost>
+                                  <nb-icon icon="close"></nb-icon>
+                              </button>
+                          </div>
+                      </div>
+                  </nb-card-header>
+                  <nb-card-body>
+                    <form [formGroup]="executiveSummaryConfigForm" #form="ngForm" class="my-3">
+
+                      <div class="form-control-group row my-3">
+                        <div class="col-sm-3">
+                            <label class="label" for="input-startDate">Start Date:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input autocomplete="off" nbInput fullWidth name="startDate" id="input-startDate"
+                                placeholder="Start Date:" #startDate [nbDatepicker]="startDateTimePicker"
+                                [status]="executiveSummaryConfigForm.controls['startDate'].touched ? (executiveSummaryConfigForm.controls['startDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                formControlName="startDate" autofocus>
+                            <nb-date-timepicker singleColumn [step]="10" #startDateTimePicker></nb-date-timepicker>
+                            <div *ngIf="executiveSummaryConfigForm.controls['startDate'].invalid && executiveSummaryConfigForm.controls['startDate'].touched"
+                                class="text-danger xyz-in px-3 row">
+                                <small xyz="fade down" class="error-message"
+                                    *ngIf="executiveSummaryConfigForm.controls['startDate'].errors?.required">
+                                    Start Date is required!
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-control-group row my-3">
+                        <div class="col-sm-3">
+                            <label class="label" for="input-endDate">End Date:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input autocomplete="off" nbInput fullWidth name="endDate" id="input-endDate"
+                                placeholder="End Date:" #endDate [nbDatepicker]="endDateTimePicker"
+                                [status]="executiveSummaryConfigForm.controls['endDate'].touched ? (executiveSummaryConfigForm.controls['endDate'].invalid ? 'danger' : 'success') : 'basic'"
+                                formControlName="endDate" autofocus>
+                            <nb-date-timepicker singleColumn [step]="10" #endDateTimePicker>
+                            </nb-date-timepicker>
+                            <div *ngIf="executiveSummaryConfigForm.controls['endDate'].invalid && executiveSummaryConfigForm.controls['endDate'].touched"
+                                class="text-danger xyz-in px-3 row">
+                                <small xyz="fade down" class="error-message"
+                                    *ngIf="executiveSummaryConfigForm.controls['endDate'].errors?.required">
+                                    End Date is required!
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                   </form>
+
+                  </nb-card-body>
+
+                  <nb-card-footer>
+                      <button (click)="loadChart()" nbButton fullWidth status="primary"
+                          [disabled]="isLoading || !executiveSummaryConfigForm.valid">
+                          Confirm
+                      </button>
+                  </nb-card-footer>
+              </nb-card>
+          </div>
+      </div>
+  </div>
+</div>

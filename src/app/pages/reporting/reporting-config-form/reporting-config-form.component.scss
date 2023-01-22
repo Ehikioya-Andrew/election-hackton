@@ -1,0 +1,14 @@
+@import "../../../@theme/styles/themes";
+@import "~bootstrap/scss/mixins/breakpoints";
+@import "~@nebular/theme/styles/global/breakpoints";
+
+@include media-breakpoint-down(is) {
+  ::ng-deep .calendar-with-time {
+    width: 100vw;
+    height: 50vh;
+    padding-top: 20px;
+  }
+  ::ng-deep .timepicker-section.timepicker-single-column-width {
+    height: 55vh;
+  }
+}

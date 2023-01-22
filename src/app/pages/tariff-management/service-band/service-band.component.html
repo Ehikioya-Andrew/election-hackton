@@ -1,0 +1,12 @@
+<div class="container-fluid p-0 m-0">
+    <div class="row m-0">
+        <div class="col-12">
+            <app-table [isLoading]="isLoadingData" tableTitle="Service Bands" [data]="serviceBands" [columns]="columns"
+                [showEdit]="permissionService.canAccessByResource('update', serviceBandResources.UpdateServiceBand)"
+                (requestData)="requestData($event)" (optionsSelected)="updateServiceBand($event)"
+                [showAdd]="permissionService.canAccessByResource('create', serviceBandResources.CreateServiceBand)"
+                (addClicked)="handleCreateNewServiceBandClick()">
+            </app-table>
+        </div>
+    </div>
+</div>
